@@ -2,6 +2,21 @@ import java.util.Scanner;
 
 public class Athena {
 
+    public String[] listData = new String[100];
+
+    public int index = -1;
+
+    private void chatResponse(String input) {
+        if (input.toLowerCase().equals("list")) {
+            for (int i = 0; i <= index; i++) {
+                System.out.println((i + 1) + ". " + listData[i]);
+            }
+        } else {
+            listData[++index] = input;
+            System.out.println("Added: " + input);
+        }
+    }
+
     private void echo() {
         Scanner scan = new Scanner(System.in);
         String input = scan.nextLine();
@@ -10,7 +25,7 @@ public class Athena {
             System.out.println("Thank you for using Athena. Initiating shutdown protocol...");
             System.exit(0);
         } else {
-            System.out.println(input + "\n");
+            chatResponse(input);
             echo();
         }
     }
