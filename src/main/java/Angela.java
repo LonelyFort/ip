@@ -1,24 +1,44 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Angela {
 
-    public String[] listData = new String[100];
-
-    public int index = -1;
+    public List<Task> listData = new ArrayList<>();
 
     private void chatResponse(String input) {
         if (input.toLowerCase().equals("list")) {
-            if (index < 0) {
+            if (listData.isEmpty()) {
                 System.out.println("No data has been stored in the database.");
             } else {
                 System.out.println("Loading current data from database...\n");
 
-                for (int i = 0; i <= index; i++) {
-                    System.out.println((i + 1) + ". " + listData[i]);
+                for (int i = 0; i < listData.size(); i++) {
+                    System.out.println((i + 1) + ". " + listData.get(i).toString());
+                }
+            }
+        } else if (input.toLowerCase().contains("check") || input.toLowerCase().contains("uncheck")) {
+            String[] splitInput = input.split(" ");
+            String action = splitInput[0];
+            int index = Integer.parseInt(splitInput[1]) - 1;
+            Task taskItem = listData.get(index);
+            if (action.equals("check")) {
+                if (taskItem.checkStatus()) {
+                    System.out.println("Task has already been marked as completed Manager.");
+                } else {
+                    taskItem.check();
+                    System.out.println("Request received. Marking the following task as completed:\n" + taskItem);
+                }
+            } else {
+                if (!taskItem.checkStatus()) {
+                    System.out.println("Task has already been marked as incomplete Manager.");
+                } else {
+                    taskItem.uncheck();
+                    System.out.println("Request received. Marking the following task as incomplete:\n" + taskItem);
                 }
             }
         } else {
-            listData[++index] = input;
+            listData.add(new Task(input));
             System.out.println("Request received. Adding \"" + input + "\" into the database.");
         }
     }
