@@ -1,53 +1,137 @@
+import TaskType.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Angela {
 
-    public List<Task> listData = new ArrayList<>();
+    // Commands and database
+    private List<Task> listData = new ArrayList<>();
+    private static final String[] TASKCREATIONCOMMANDS = {
+            "todo",
+            "deadline",
+            "event"
+    };
+    private static final String[] MODIFYTASKCOMMANDS = {
+            "check",
+            "uncheck"
+    };
+    private static final String[] PRINTCOMMANDS = {
+            "list"
+    };
 
-    private void chatResponse(String input) {
-        if (input.toLowerCase().equals("list")) {
-            if (listData.isEmpty()) {
-                System.out.println("No data has been stored in the database.");
-            } else {
-                System.out.println("Loading current data from database...\n");
+    // List functions
 
-                for (int i = 0; i < listData.size(); i++) {
-                    System.out.println((i + 1) + ". " + listData.get(i).toString());
-                }
+    private boolean containsCommand(String[] cmdList, String cmd) {
+        for (String cmdItem : cmdList) {
+            if (cmd.equals(cmdItem)) return true;
+        }
+        return false;
+    }
+
+    private int checkCompletedTasks() {
+        int res = 0;
+        for (Task listItem : listData) {
+            if (!listItem.isCompleted()) {
+                res++;
             }
-        } else if (input.toLowerCase().contains("check") || input.toLowerCase().contains("uncheck")) {
-            String[] splitInput = input.split(" ");
-            String action = splitInput[0];
-            int index = Integer.parseInt(splitInput[1]) - 1;
-            Task taskItem = listData.get(index);
-            if (action.equals("check")) {
-                if (taskItem.checkStatus()) {
-                    System.out.println("Task has already been marked as completed Manager.");
-                } else {
-                    taskItem.check();
-                    System.out.println("Request received. Marking the following task as completed:\n" + taskItem);
-                }
+        }
+        return res;
+    }
+
+    // Chat response functions
+    private void handlePrint() {
+        if (listData.isEmpty()) {
+            System.out.println("No data has been stored in the database.");
+        } else {
+            System.out.println("Loading current data from database...\n");
+
+            for (int i = 0; i < listData.size(); i++) {
+                System.out.println((i + 1) + ". " + listData.get(i).toString());
+            }
+        }
+    }
+
+    private void handleTaskModification(String input) {
+        String[] splitInput = input.split(" ");
+        String action = splitInput[0];
+        int index = Integer.parseInt(splitInput[1]) - 1;
+        Task taskItem = listData.get(index);
+        if (action.equals("check")) {
+            if (taskItem.isCompleted()) {
+                System.out.println("Task has already been marked as completed Manager.");
             } else {
-                if (!taskItem.checkStatus()) {
-                    System.out.println("Task has already been marked as incomplete Manager.");
-                } else {
-                    taskItem.uncheck();
-                    System.out.println("Request received. Marking the following task as incomplete:\n" + taskItem);
-                }
+                taskItem.check();
+                System.out.println("Request received. Marking the following task as completed:\n" + taskItem);
             }
         } else {
-            listData.add(new Task(input));
-            System.out.println("Request received. Adding \"" + input + "\" into the database.");
+            if (!taskItem.isCompleted()) {
+                System.out.println("Task has already been marked as incomplete Manager.");
+            } else {
+                taskItem.uncheck();
+                System.out.println("Request received. Marking the following task as incomplete:\n" + taskItem);
+            }
+        }
+    }
+
+    // Syntax todo: todo action deadline: deadline action by:Time event: event action from:Time to:Time
+
+    private void handleTaskCreation(String input) {
+        if (!input.contains(" ")) {
+            System.out.println("Task description cannot be empty.");
+            return;
+        }
+        String cmd = input.substring(0, input.indexOf(" ")).toLowerCase();
+        String details = input.substring(input.indexOf(" ") + 1).strip();
+        Task newTask;
+        if (cmd.equals("todo")) {
+            newTask = new ToDo(details);
+        } else if (cmd.equals("deadline")) {
+            if (!details.contains("by:")) {
+                System.out.println("Invalid syntax for deadline command. Please check the manual again Manager.");
+                return;
+            }
+            String taskDesc = details.substring(0, details.indexOf("by:"));
+            String end = details.substring(details.indexOf("by:") + 3);
+            newTask = new Deadline(end, taskDesc);
+        } else {
+            if (!details.contains("from:") || !details.contains("to:")) {
+                System.out.println("Invalid syntax for event command. Please check the manual again Manager.");
+                return;
+            }
+            String taskDesc = details.substring(0, details.indexOf("from:"));
+            String start = details.substring(details.indexOf("from:") + 5, details.indexOf("to:"));
+            String end = details.substring(details.indexOf("to:") + 3);
+            newTask = new Event(start, end, taskDesc);
+        }
+        listData.add(newTask);
+        System.out.println(
+                "Request received. Adding the following task into the database: \n\n" +
+                        "   " + newTask + "\n\n" +
+                        "You have " + checkCompletedTasks() + " tasks remaining."
+        );
+    }
+
+    private void chatResponse(String input) {
+        String cmd = input.split(" ")[0].toLowerCase();
+
+        if (containsCommand(PRINTCOMMANDS, cmd)) {
+            handlePrint();
+        } else if (containsCommand(MODIFYTASKCOMMANDS, cmd)) {
+            handleTaskModification(input);
+        } else if (containsCommand(TASKCREATIONCOMMANDS, cmd)){
+            handleTaskCreation(input);
+        } else {
+            System.out.println("Invalid command. Please check the manual again Manager.");
         }
     }
 
     private void echo() {
         Scanner scan = new Scanner(System.in);
-        String input = scan.nextLine();
+        String input = scan.nextLine().strip();
 
-        if (input.toLowerCase().equals("bye")) {
+        if (input.toLowerCase().contains("bye")) {
             System.out.println("Initiating shutdown protocol...");
             System.exit(0);
         } else {

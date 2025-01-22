@@ -1,0 +1,80 @@
+
+
+// Todo test cases
+
+todo borrow book
+
+todo sexting123
+
+todo ??//eAsy##$(!)))*#&
+
+todo list
+
+todo todo(todo(todo(todo)))
+
+todo deadline (skip school) {2023-12-23}
+
+TODO (          w          ( ) )
+
+// invalid cases
+
+todo
+
+to d o
+
+todo?
+
+// deadline test cases
+
+deadline CS2103T submission by:Friday
+
+deadline ??//eAsy##$(!)))*#& by:Groundhog day
+
+deadline check 2 by:   wakanda 4eva
+
+deadline deadline deadline deadlineby: ??!!@@#deadline??!!@@#
+
+DEadLinE a by:0
+
+// invalid cases
+
+deadline
+
+deadline test action
+
+deadline?
+
+deadline BY:
+
+deadline a yb: ?
+
+// event
+
+event project meeting from: Mon 2pm to: 4pm
+
+event ??//eAsy##$(!)))*#& from:))@(@8()*&()@*Y)DH to:     0020 7783
+
+event uncheck 3 from: list to:list
+
+event testfrom:oto:aw
+
+event event event from:to:
+
+EvEnT A from: A to: B
+
+// invalid cases
+
+event
+
+event frm: t:
+
+event from:
+
+event to:
+
+event from to
+
+event FROM: TO:
+
+
+
