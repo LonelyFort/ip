@@ -19,7 +19,8 @@ public class Angela {
     };
     private static final String[] MODIFYTASKCOMMANDS = {
             "check",
-            "uncheck"
+            "uncheck",
+            "delete"
     };
     private static final String[] PRINTCOMMANDS = {
             "list"
@@ -72,13 +73,20 @@ public class Angela {
                 taskItem.check();
                 System.out.println("Request received. Marking the following task as completed:\n" + taskItem);
             }
-        } else {
+        } else if (action.equals("uncheck")){
             if (!taskItem.isCompleted()) {
                 System.out.println("Task has already been marked as incomplete Manager.");
             } else {
                 taskItem.uncheck();
                 System.out.println("Request received. Marking the following task as incomplete:\n" + taskItem);
             }
+        } else {
+            listData.remove(index);
+            System.out.println(
+                    "Request received. Removing the following task from the database: \n\n" +
+                            "   " + taskItem + "\n\n" +
+                            "You have " + listData.size() + " tasks on the list."
+            );
         }
     }
 
