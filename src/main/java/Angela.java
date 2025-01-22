@@ -1,4 +1,8 @@
 import TaskType.*;
+import Exceptions.PrintListException.*;
+import Exceptions.TaskModificationException.*;
+import Exceptions.TaskCreationException.*;
+import Exceptions.ChatResponseException.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +35,9 @@ public class Angela {
     }
 
     // Chat response functions
-    private void handlePrint() {
+    private void handlePrint() throws PrintListException {
         if (listData.isEmpty()) {
-            System.out.println("No data has been stored in the database.");
+            throw new EmptyListException();
         } else {
             System.out.println("Loading current data from database...\n");
 
@@ -43,26 +47,22 @@ public class Angela {
         }
     }
 
-    private void handleTaskModification(String input) {
+    private void handleTaskModification(String input) throws TaskModificationException {
         if (!input.contains(" ")) {
-            System.out.println("Enter the rank of the list item you want to modify. Negative number is not accepted.");
-            return;
+           throw new WrongSyntaxException();
         }
         if (listData.isEmpty()) {
-            System.out.println("No task has been created. Create one first Manager.");
-            return;
+            throw new ListEmptyException();
         }
         String action = input.substring(0, input.indexOf(" "));
         String details = input.substring(input.indexOf(" ") + 1);
         // Regex will check if details contains only numbers
         if (!details.matches("^\\d+$")) {
-            System.out.println("Enter the rank of the list item you want to modify. Negative number is not accepted.");
-            return;
+            throw new WrongSyntaxException();
         }
         int index = Integer.parseInt(details) - 1;
         if (index < 0 || index >= listData.size()) {
-            System.out.println("Invalid index. There are " + listData.size() + " task(s) in the database.");
-            return;
+            throw new InvalidIndexException(listData.size());
         }
         Task taskItem = listData.get(index);
         if (action.equals("check")) {
@@ -84,10 +84,9 @@ public class Angela {
 
     // Syntax todo: todo action deadline: deadline action by:Time event: event action from:Time to:Time
 
-    private void handleTaskCreation(String input) {
+    private void handleTaskCreation(String input) throws TaskCreationException {
         if (!input.contains(" ")) {
-            System.out.println("Task description cannot be empty.");
-            return;
+            throw new EmptyDetailException();
         }
         String cmd = input.substring(0, input.indexOf(" ")).toLowerCase();
         String details = input.substring(input.indexOf(" ") + 1).strip();
@@ -96,16 +95,14 @@ public class Angela {
             newTask = new ToDo(details);
         } else if (cmd.equals("deadline")) {
             if (!details.contains("by:")) {
-                System.out.println("Invalid syntax for deadline command. Check the manual again Manager.");
-                return;
+                throw new InvalidSyntaxException(cmd);
             }
             String taskDesc = details.substring(0, details.indexOf("by:"));
             String end = details.substring(details.indexOf("by:") + 3);
             newTask = new Deadline(end, taskDesc);
         } else {
             if (!details.contains("from:") || !details.contains("to:")) {
-                System.out.println("Invalid syntax for event command. Check the manual again Manager.");
-                return;
+                throw new InvalidSyntaxException(cmd);
             }
             String taskDesc = details.substring(0, details.indexOf("from:"));
             String start = details.substring(details.indexOf("from:") + 5, details.indexOf("to:"));
@@ -123,17 +120,21 @@ public class Angela {
     private void chatResponse(String input) {
         String cmd = input.split(" ")[0].toLowerCase();
 
-        if (containsCommand(PRINTCOMMANDS, cmd)) {
-            handlePrint();
-        } else if (containsCommand(MODIFYTASKCOMMANDS, cmd)) {
-            handleTaskModification(input);
-        } else if (containsCommand(TASKCREATIONCOMMANDS, cmd)) {
-            handleTaskCreation(input);
-        } else if (cmd.contains("bye")) {
-            System.out.println("Initiating shutdown protocol...");
-            System.exit(0);
-        } else {
-            System.out.println("Invalid command. Check the manual again Manager.");
+        try {
+            if (containsCommand(PRINTCOMMANDS, cmd)) {
+                handlePrint();
+            } else if (containsCommand(MODIFYTASKCOMMANDS, cmd)) {
+                handleTaskModification(input);
+            } else if (containsCommand(TASKCREATIONCOMMANDS, cmd)) {
+                handleTaskCreation(input);
+            } else if (cmd.contains("bye")) {
+                System.out.println("Initiating shutdown protocol...");
+                System.exit(0);
+            } else {
+                throw new ChatResponseException();
+            }
+        } catch (Exception e) {
+            System.out.println(e);
         }
     }
 
