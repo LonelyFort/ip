@@ -28,6 +28,13 @@ public class Angela {
 
     // List functions
 
+    /**
+     * Checks if a given command is present in the list of commands.
+     *
+     * @param cmdList an array of strings representing the list of commands
+     * @param cmd the command to search for in the list
+     * @return true if the command is found in the list, false otherwise
+     */
     private boolean containsCommand(String[] cmdList, String cmd) {
         for (String cmdItem : cmdList) {
             if (cmd.equals(cmdItem)) return true;
@@ -36,6 +43,14 @@ public class Angela {
     }
 
     // Chat response functions
+
+    /**
+     * Handles the printing of list data.
+     * If the list is empty, an EmptyListException is thrown.
+     * Otherwise, it prints the current data from the database.
+     *
+     * @throws EmptyListException if the list data is empty
+     */
     private void handlePrint() throws PrintListException {
         if (listData.isEmpty()) {
             throw new EmptyListException();
@@ -48,6 +63,19 @@ public class Angela {
         }
     }
 
+    /**
+     * Modifies a task in listData based on the provided input.
+     * The input must follow a specific syntax: "<action> <taskIndex>".
+     * The method can perform actions recognised in MODIFYTASKCOMMANDS array.
+     * If the list is empty, a ListEmptyException is thrown.
+     * If the input syntax is incorrect, a WrongSyntaxException is thrown.
+     * If the task index is invalid, an InvalidIndexException is thrown.
+     *
+     * @param input the input string containing the action and task index
+     * @throws WrongSyntaxException if the input syntax is incorrect
+     * @throws ListEmptyException if the list data is empty
+     * @throws InvalidIndexException if the task index is invalid
+     */
     private void handleTaskModification(String input) throws TaskModificationException {
         if (!input.contains(" ")) {
            throw new WrongSyntaxException();
@@ -90,8 +118,19 @@ public class Angela {
         }
     }
 
-    // Syntax todo: todo action deadline: deadline action by:Time event: event action from:Time to:Time
-
+    /**
+     * Handles the creation of a new task based on the provided input.
+     * The input must follow a specific syntax:
+     * - "todo <taskDetails>" for ToDo tasks
+     * - "deadline <taskDetails> by:<endDateTime>" for Deadline tasks
+     * - "event <taskDetails> from:<startDateTime> to:<endDateTime>" for Event tasks
+     * If the input syntax is incorrect, an InvalidSyntaxException is thrown.
+     * If the input details are empty, an EmptyDetailException is thrown.
+     *
+     * @param input the input string containing the command and task details
+     * @throws EmptyDetailException if the input details are empty
+     * @throws InvalidSyntaxException if the input syntax is incorrect
+     */
     private void handleTaskCreation(String input) throws TaskCreationException {
         if (!input.contains(" ")) {
             throw new EmptyDetailException();
@@ -125,6 +164,14 @@ public class Angela {
         );
     }
 
+    /**
+     * Handles the response to a chat command input.
+     * It determines the command from the input and delegates the task to the appropriate handler.
+     * Supported commands include print, modify task, task creation, and shutdown.
+     * If the command is not recognized, a ChatResponseException is thrown.
+     *
+     * @param input the input string containing the chat command
+     */
     private void chatResponse(String input) {
         String cmd = input.split(" ")[0].toLowerCase();
 
@@ -146,19 +193,28 @@ public class Angela {
         }
     }
 
+    /**
+     * Continuously reads input from the user and processes chat commands.
+     * Comments (lines starting with '/') are ignored.
+     * The input is stripped of leading and trailing whitespace before being processed.
+     * The method runs indefinitely in a loop, handling chat commands via the chatResponse method.
+     */
     private void echo() {
         Scanner scan = new Scanner(System.in);
 
         while (true) {
             String input = scan.nextLine().strip();
-
-            // ignores comments and empty lines
+            // ignores comments
             if (input.charAt(0) == '/') continue;
-
             chatResponse(input);
         }
     }
 
+    /**
+     * Prints onto the terminal when a user first initiated Angela.
+     * Utilised setTimeout method to provide a more realistic experience.
+     * ASCII art depicts Angela from Lobotomy Corp.
+     */
     private void greet() {
         setTimeout(() -> System.out.println("Initiating..."), 1000);
         setTimeout(() -> System.out.println("Application starting..."), 4000);
@@ -280,6 +336,10 @@ public class Angela {
     }
     //@@author
 
+    /**
+     * Main method for Angela.
+     * @param args
+     */
     public static void main(String[] args) {
         Angela session = new Angela();
         session.greet();
