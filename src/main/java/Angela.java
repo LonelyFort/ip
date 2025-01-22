@@ -30,16 +30,6 @@ public class Angela {
         return false;
     }
 
-    private int checkCompletedTasks() {
-        int res = 0;
-        for (Task listItem : listData) {
-            if (!listItem.isCompleted()) {
-                res++;
-            }
-        }
-        return res;
-    }
-
     // Chat response functions
     private void handlePrint() {
         if (listData.isEmpty()) {
@@ -54,9 +44,26 @@ public class Angela {
     }
 
     private void handleTaskModification(String input) {
-        String[] splitInput = input.split(" ");
-        String action = splitInput[0];
-        int index = Integer.parseInt(splitInput[1]) - 1;
+        if (!input.contains(" ")) {
+            System.out.println("Enter the rank of the list item you want to modify. Negative number is not accepted.");
+            return;
+        }
+        if (listData.isEmpty()) {
+            System.out.println("No task has been created. Create one first Manager.");
+            return;
+        }
+        String action = input.substring(0, input.indexOf(" "));
+        String details = input.substring(input.indexOf(" ") + 1);
+        // Regex will check if details contains only numbers
+        if (!details.matches("^\\d+$")) {
+            System.out.println("Enter the rank of the list item you want to modify. Negative number is not accepted.");
+            return;
+        }
+        int index = Integer.parseInt(details) - 1;
+        if (index < 0 || index >= listData.size()) {
+            System.out.println("Invalid index. There are " + listData.size() + " task(s) in the database.");
+            return;
+        }
         Task taskItem = listData.get(index);
         if (action.equals("check")) {
             if (taskItem.isCompleted()) {
@@ -89,7 +96,7 @@ public class Angela {
             newTask = new ToDo(details);
         } else if (cmd.equals("deadline")) {
             if (!details.contains("by:")) {
-                System.out.println("Invalid syntax for deadline command. Please check the manual again Manager.");
+                System.out.println("Invalid syntax for deadline command. Check the manual again Manager.");
                 return;
             }
             String taskDesc = details.substring(0, details.indexOf("by:"));
@@ -97,7 +104,7 @@ public class Angela {
             newTask = new Deadline(end, taskDesc);
         } else {
             if (!details.contains("from:") || !details.contains("to:")) {
-                System.out.println("Invalid syntax for event command. Please check the manual again Manager.");
+                System.out.println("Invalid syntax for event command. Check the manual again Manager.");
                 return;
             }
             String taskDesc = details.substring(0, details.indexOf("from:"));
@@ -109,7 +116,7 @@ public class Angela {
         System.out.println(
                 "Request received. Adding the following task into the database: \n\n" +
                         "   " + newTask + "\n\n" +
-                        "You have " + checkCompletedTasks() + " tasks remaining."
+                        "You have " + listData.size() + " tasks on the list."
         );
     }
 
@@ -120,23 +127,26 @@ public class Angela {
             handlePrint();
         } else if (containsCommand(MODIFYTASKCOMMANDS, cmd)) {
             handleTaskModification(input);
-        } else if (containsCommand(TASKCREATIONCOMMANDS, cmd)){
+        } else if (containsCommand(TASKCREATIONCOMMANDS, cmd)) {
             handleTaskCreation(input);
+        } else if (cmd.contains("bye")) {
+            System.out.println("Initiating shutdown protocol...");
+            System.exit(0);
         } else {
-            System.out.println("Invalid command. Please check the manual again Manager.");
+            System.out.println("Invalid command. Check the manual again Manager.");
         }
     }
 
     private void echo() {
         Scanner scan = new Scanner(System.in);
-        String input = scan.nextLine().strip();
 
-        if (input.toLowerCase().contains("bye")) {
-            System.out.println("Initiating shutdown protocol...");
-            System.exit(0);
-        } else {
+        while (true) {
+            String input = scan.nextLine().strip();
+
+            // ignores comments and empty lines
+            if (input.charAt(0) == '/') continue;
+
             chatResponse(input);
-            echo();
         }
     }
 
@@ -264,6 +274,6 @@ public class Angela {
     public static void main(String[] args) {
         Angela session = new Angela();
         session.greet();
-        session.echo();
+        setTimeout(() -> session.echo(), 10000);
     }
 }
