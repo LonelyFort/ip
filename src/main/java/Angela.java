@@ -1,8 +1,21 @@
-import TaskType.*;
-import Exceptions.PrintListException.*;
-import Exceptions.TaskModificationException.*;
-import Exceptions.TaskCreationException.*;
-import Exceptions.ChatResponseException.*;
+import tasktype.Task;
+import tasktype.Deadline;
+import tasktype.Event;
+import tasktype.ToDo;
+
+import exceptions.printlist.EmptyListException;
+import exceptions.printlist.PrintListException;
+
+import exceptions.taskmodification.TaskModificationException;
+import exceptions.taskmodification.InvalidIndexException;
+import exceptions.taskmodification.ListEmptyException;
+import exceptions.taskmodification.WrongSyntaxException;
+
+import exceptions.taskcreation.InvalidSyntaxException;
+import exceptions.taskcreation.TaskCreationException;
+import exceptions.taskcreation.EmptyDetailException;
+
+import exceptions.chatresponse.ChatResponseException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,17 +25,17 @@ public class Angela {
 
     // Commands and database
     private List<Task> listData = new ArrayList<>();
-    private static final String[] TASKCREATIONCOMMANDS = {
+    private static final String[] TASK_CREATION_COMMANDS = {
             "todo",
             "deadline",
             "event"
     };
-    private static final String[] MODIFYTASKCOMMANDS = {
+    private static final String[] MODIFY_TASK_COMMANDS = {
             "check",
             "uncheck",
             "delete"
     };
-    private static final String[] PRINTCOMMANDS = {
+    private static final String[] PRINT_COMMANDS = {
             "list"
     };
 
@@ -37,7 +50,9 @@ public class Angela {
      */
     private boolean containsCommand(String[] cmdList, String cmd) {
         for (String cmdItem : cmdList) {
-            if (cmd.equals(cmdItem)) return true;
+            if (cmd.equals(cmdItem)) {
+                return true;
+            }
         }
         return false;
     }
@@ -176,11 +191,11 @@ public class Angela {
         String cmd = input.split(" ")[0].toLowerCase();
 
         try {
-            if (containsCommand(PRINTCOMMANDS, cmd)) {
+            if (containsCommand(PRINT_COMMANDS, cmd)) {
                 handlePrint();
-            } else if (containsCommand(MODIFYTASKCOMMANDS, cmd)) {
+            } else if (containsCommand(MODIFY_TASK_COMMANDS, cmd)) {
                 handleTaskModification(input);
-            } else if (containsCommand(TASKCREATIONCOMMANDS, cmd)) {
+            } else if (containsCommand(TASK_CREATION_COMMANDS, cmd)) {
                 handleTaskCreation(input);
             } else if (cmd.contains("bye")) {
                 System.out.println("Initiating shutdown protocol...");

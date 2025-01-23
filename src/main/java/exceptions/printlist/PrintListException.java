@@ -1,4 +1,4 @@
-package Exceptions.PrintListException;
+package exceptions.printlist;
 
 public class PrintListException extends Exception {
 
