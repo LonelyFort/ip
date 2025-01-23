@@ -1,11 +1,13 @@
 package tasktype;
+import java.time.LocalDateTime;
+import util.DateTimeValueHandler;
 
 /**
  * Represents a task with a deadline.
  */
 public class Deadline extends Task {
     // The end time or date of the deadline.
-    private String end;
+    private LocalDateTime end;
 
     /**
      * Constructs a Deadline object with a specified end time/date and task detail.
@@ -13,7 +15,7 @@ public class Deadline extends Task {
      * @param end The end time or date of the deadline.
      * @param detail The details of the task.
      */
-    public Deadline(String end, String detail) {
+    public Deadline(LocalDateTime end, String detail) {
          super(detail);
          this.end = end;
     }
@@ -26,6 +28,6 @@ public class Deadline extends Task {
      */
     @Override
     public String toString() {
-         return String.format("[D]%s (by: %s)", super.toString(), end);
-     }
+         return String.format("[D]%s (by: %s)", super.toString(), DateTimeValueHandler.printDateTime(end));
+    }
 }

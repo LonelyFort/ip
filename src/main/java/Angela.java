@@ -3,6 +3,8 @@ import tasktype.Deadline;
 import tasktype.Event;
 import tasktype.ToDo;
 
+import util.DateTimeValueHandler;
+
 import exceptions.printlist.EmptyListException;
 import exceptions.printlist.PrintListException;
 
@@ -10,6 +12,7 @@ import exceptions.taskmodification.TaskModificationException;
 import exceptions.taskmodification.InvalidIndexException;
 import exceptions.taskmodification.ListEmptyException;
 import exceptions.taskmodification.WrongSyntaxException;
+import exceptions.taskcreation.InvalidDateException;
 
 import exceptions.taskcreation.InvalidSyntaxException;
 import exceptions.taskcreation.TaskCreationException;
@@ -17,6 +20,8 @@ import exceptions.taskcreation.EmptyDetailException;
 
 import exceptions.chatresponse.ChatResponseException;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -160,16 +165,30 @@ public class Angela {
                 throw new InvalidSyntaxException(cmd);
             }
             String taskDesc = details.substring(0, details.indexOf("by:"));
-            String end = details.substring(details.indexOf("by:") + 3);
-            newTask = new Deadline(end, taskDesc);
+            String end = details.substring(details.indexOf("by:") + 3).strip();
+            LocalDateTime endDateTime;
+            try {
+                endDateTime = DateTimeValueHandler.parseDateTime(end);
+            } catch (DateTimeParseException e) {
+                throw new InvalidDateException();
+            }
+            newTask = new Deadline(endDateTime, taskDesc);
         } else {
             if (!details.contains("from:") || !details.contains("to:")) {
                 throw new InvalidSyntaxException(cmd);
             }
             String taskDesc = details.substring(0, details.indexOf("from:"));
-            String start = details.substring(details.indexOf("from:") + 5, details.indexOf("to:"));
-            String end = details.substring(details.indexOf("to:") + 3);
-            newTask = new Event(start, end, taskDesc);
+            String start = details.substring(details.indexOf("from:") + 5, details.indexOf("to:")).strip();
+            String end = details.substring(details.indexOf("to:") + 3).strip();
+            LocalDateTime startDateTime;
+            LocalDateTime endDateTime;
+            try {
+                startDateTime = DateTimeValueHandler.parseDateTime(start);
+                endDateTime = DateTimeValueHandler.parseDateTime(end);
+            } catch (DateTimeParseException e) {
+                throw new InvalidDateException();
+            }
+            newTask = new Event(startDateTime, endDateTime, taskDesc);
         }
         listData.add(newTask);
         System.out.println(
