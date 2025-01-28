@@ -1,5 +1,6 @@
 package Angela;
 
+import Angela.exceptions.taskcreation.*;
 import Angela.tasktype.Task;
 import Angela.tasktype.Deadline;
 import Angela.tasktype.Event;
@@ -14,11 +15,6 @@ import Angela.exceptions.taskmodification.TaskModificationException;
 import Angela.exceptions.taskmodification.InvalidIndexException;
 import Angela.exceptions.taskmodification.ListEmptyException;
 import Angela.exceptions.taskmodification.WrongSyntaxException;
-import Angela.exceptions.taskcreation.InvalidDateException;
-
-import Angela.exceptions.taskcreation.InvalidSyntaxException;
-import Angela.exceptions.taskcreation.TaskCreationException;
-import Angela.exceptions.taskcreation.EmptyDetailException;
 
 import Angela.exceptions.chatresponse.ChatResponseException;
 
@@ -200,6 +196,9 @@ public class Angela {
                 endDateTime = DateTimeValueHandler.parseDateTime(end);
             } catch (DateTimeParseException e) {
                 throw new InvalidDateException();
+            }
+            if (endDateTime.isBefore(startDateTime)) {
+                throw new DateOrderException();
             }
             newTask = new Event(startDateTime, endDateTime, taskDesc);
         }
