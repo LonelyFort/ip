@@ -1,4 +1,4 @@
-package exceptions.chatresponse;
+package Angela.exceptions.chatresponse;
 
 /**
  * Represents an exception that is thrown when an invalid command

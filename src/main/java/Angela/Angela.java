@@ -1,24 +1,29 @@
-import tasktype.Task;
-import tasktype.Deadline;
-import tasktype.Event;
-import tasktype.ToDo;
+package Angela;
 
-import util.DateTimeValueHandler;
+import Angela.tasktype.Task;
+import Angela.tasktype.Deadline;
+import Angela.tasktype.Event;
+import Angela.tasktype.ToDo;
 
-import exceptions.printlist.EmptyListException;
-import exceptions.printlist.PrintListException;
+import Angela.util.DateTimeValueHandler;
 
-import exceptions.taskmodification.TaskModificationException;
-import exceptions.taskmodification.InvalidIndexException;
-import exceptions.taskmodification.ListEmptyException;
-import exceptions.taskmodification.WrongSyntaxException;
-import exceptions.taskcreation.InvalidDateException;
+import Angela.exceptions.printlist.EmptyListException;
+import Angela.exceptions.printlist.PrintListException;
 
-import exceptions.taskcreation.InvalidSyntaxException;
-import exceptions.taskcreation.TaskCreationException;
-import exceptions.taskcreation.EmptyDetailException;
+import Angela.exceptions.taskmodification.TaskModificationException;
+import Angela.exceptions.taskmodification.InvalidIndexException;
+import Angela.exceptions.taskmodification.ListEmptyException;
+import Angela.exceptions.taskmodification.WrongSyntaxException;
+import Angela.exceptions.taskcreation.InvalidDateException;
 
-import exceptions.chatresponse.ChatResponseException;
+import Angela.exceptions.taskcreation.InvalidSyntaxException;
+import Angela.exceptions.taskcreation.TaskCreationException;
+import Angela.exceptions.taskcreation.EmptyDetailException;
+
+import Angela.exceptions.chatresponse.ChatResponseException;
+
+import Angela.storage.Database;
+import Angela.storage.TaskList;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
@@ -27,9 +32,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Angela {
-
-    // Commands and database
-    private List<Task> listData = new ArrayList<>();
+    // Commands
     private static final String[] TASK_CREATION_COMMANDS = {
             "todo",
             "deadline",
@@ -43,6 +46,16 @@ public class Angela {
     private static final String[] PRINT_COMMANDS = {
             "list"
     };
+
+    // private elements
+    private Database database;
+    private TaskList listData;
+
+    // Constructor
+    public Angela(String filePath) {
+        this.listData = new TaskList();
+        this.database = new Database(filePath, listData);
+    }
 
     // List functions
 
@@ -76,10 +89,7 @@ public class Angela {
             throw new EmptyListException();
         } else {
             System.out.println("Loading current data from database...\n");
-
-            for (int i = 0; i < listData.size(); i++) {
-                System.out.println((i + 1) + ". " + listData.get(i).toString());
-            }
+            listData.printList();
         }
     }
 
@@ -120,6 +130,7 @@ public class Angela {
             } else {
                 taskItem.check();
                 System.out.println("Request received. Marking the following task as completed:\n" + taskItem);
+                database.updateSavedTask(listData);
             }
         } else if (action.equals("uncheck")){
             if (!taskItem.isCompleted()) {
@@ -127,6 +138,7 @@ public class Angela {
             } else {
                 taskItem.uncheck();
                 System.out.println("Request received. Marking the following task as incomplete:\n" + taskItem);
+                database.updateSavedTask(listData);
             }
         } else {
             listData.remove(index);
@@ -135,6 +147,7 @@ public class Angela {
                             "   " + taskItem + "\n\n" +
                             "You have " + listData.size() + " tasks on the list."
             );
+            database.updateSavedTask(listData);
         }
     }
 
@@ -196,6 +209,7 @@ public class Angela {
                         "   " + newTask + "\n\n" +
                         "You have " + listData.size() + " tasks on the list."
         );
+        database.updateSavedTask(listData);
     }
 
     /**
@@ -247,7 +261,7 @@ public class Angela {
     /**
      * Prints onto the terminal when a user first initiated Angela.
      * Utilised setTimeout method to provide a more realistic experience.
-     * ASCII art depicts Angela from Lobotomy Corp.
+     * ASCII art depicts Angela. from Lobotomy Corp.
      */
     private void greet() {
         setTimeout(() -> System.out.println("Initiating..."), 1000);
@@ -346,7 +360,7 @@ public class Angela {
                                                       @@####@@@                                        \s
                         
                         
-                Welcome, Manager. I am your assistant AI, Angela. 
+                Welcome, Manager. I am your assistant AI, Angela.
                 I am here to support you as it's your first day. 
                 I will provide practical advice and emotional support until you get used to your work.
                 
@@ -375,7 +389,7 @@ public class Angela {
      * @param args
      */
     public static void main(String[] args) {
-        Angela session = new Angela();
+        Angela session = new Angela("savedFile/tasks.txt");
         session.greet();
         setTimeout(() -> session.echo(), 10000);
     }

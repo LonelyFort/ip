@@ -1,4 +1,4 @@
-package tasktype;
+package Angela.tasktype;
 
 /**
  * Represents a generic task with details and completion status.
@@ -19,6 +19,11 @@ public class Task {
     public Task(String detail) {
         this.detail = detail;
         this.isCompleted = false;
+    }
+
+    public Task(String detail, boolean isCompleted) {
+        this.detail = detail;
+        this.isCompleted = isCompleted;
     }
 
     /**
@@ -52,6 +57,10 @@ public class Task {
      */
     public boolean isCompleted() {
         return isCompleted;
+    }
+
+    public String toSaveFormat() {
+        return String.format("|%s|%s", completedSymbol(),this.detail);
     }
 
     /**

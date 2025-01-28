@@ -1,4 +1,4 @@
-package util;
+package Angela.util;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -7,7 +7,6 @@ import java.util.Locale;
 
 /**
  * A utility class to handle date and time values.
- * Solution largely inspired by Clifong https://github.com/Clifong/ip.
  */
 public class DateTimeValueHandler {
 
@@ -32,7 +31,11 @@ public class DateTimeValueHandler {
      */
     public static String printDateTime(LocalDateTime date) {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm");
+        return dateFormatter.format(date);
+    }
 
+    public static String saveDateTime(LocalDateTime date) {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm");
         return dateFormatter.format(date);
     }
 }

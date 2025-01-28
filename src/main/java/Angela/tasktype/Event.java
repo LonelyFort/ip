@@ -1,7 +1,7 @@
-package tasktype;
+package Angela.tasktype;
 
 import java.time.LocalDateTime;
-import util.DateTimeValueHandler;
+import Angela.util.DateTimeValueHandler;
 
 /**
  * Represents an event task with a start and end time/date.
@@ -23,6 +23,19 @@ public class Event extends Task {
         super(detail);
         this.start = start;
         this.end = end;
+    }
+
+    public Event(LocalDateTime start, LocalDateTime end, String detail, boolean isCompleted) {
+        super(detail, isCompleted);
+        this.start = start;
+        this.end = end;
+    }
+
+    @Override
+    public String toSaveFormat() {
+        return "E" + super.toSaveFormat() + "|"
+                + DateTimeValueHandler.printDateTime(start) + "|"
+                + DateTimeValueHandler.printDateTime(end);
     }
 
     /**

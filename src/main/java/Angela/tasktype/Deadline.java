@@ -1,6 +1,6 @@
-package tasktype;
+package Angela.tasktype;
 import java.time.LocalDateTime;
-import util.DateTimeValueHandler;
+import Angela.util.DateTimeValueHandler;
 
 /**
  * Represents a task with a deadline.
@@ -18,6 +18,16 @@ public class Deadline extends Task {
     public Deadline(LocalDateTime end, String detail) {
          super(detail);
          this.end = end;
+    }
+
+    public Deadline(LocalDateTime end, String detail, boolean isCompleted) {
+        super(detail, isCompleted);
+        this.end = end;
+    }
+
+    @Override
+    public String toSaveFormat() {
+        return "D" + super.toSaveFormat() + "|" + DateTimeValueHandler.printDateTime(end);
     }
 
     /**

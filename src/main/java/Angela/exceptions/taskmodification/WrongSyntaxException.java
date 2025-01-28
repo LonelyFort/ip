@@ -1,4 +1,4 @@
-package exceptions.taskmodification;
+package Angela.exceptions.taskmodification;
 
 /**
  * Represents an exception that is thrown when the syntax used

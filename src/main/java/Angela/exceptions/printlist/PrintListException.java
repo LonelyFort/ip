@@ -1,4 +1,4 @@
-package exceptions.printlist;
+package Angela.exceptions.printlist;
 
 public class PrintListException extends Exception {
 

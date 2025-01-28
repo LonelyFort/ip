@@ -1,4 +1,4 @@
-package tasktype;
+package Angela.tasktype;
 
 /**
  * Represents a simple to-do task.
@@ -12,6 +12,15 @@ public class ToDo extends Task {
      */
     public ToDo(String detail) {
         super(detail);
+    }
+
+    public ToDo(String detail, boolean isCompleted) {
+        super(detail, isCompleted);
+    }
+
+    @Override
+    public String toSaveFormat() {
+        return "T" + super.toSaveFormat();
     }
 
     /**
