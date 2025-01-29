@@ -28,10 +28,16 @@ public class TaskList {
         listData.add(newTask);
     }
 
-    public void printList() {
+    public String printList() {
+        StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < size(); i++) {
-            System.out.println((i + 1) + ". " + get(i).toString());
+            String line = (i + 1) + ", " + get(i).toString();
+            if (i < size() - 1) {
+                line += "\n";
+            }
+            stringBuilder.append(line);
         }
+        return stringBuilder.toString();
     }
 
     public String saveAllTask() {
