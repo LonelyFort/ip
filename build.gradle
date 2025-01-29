@@ -29,16 +29,21 @@ test {
 }
 
 application {
-    mainClass.set("seedu.duke.Duke")
+    mainClass.set("Angela.Angela")
 }
 
 shadowJar {
-    archiveBaseName = "duke"
+    archiveBaseName = "Angela"
     archiveClassifier = null
+    mainClassName = 'Angela.Angela'
 }
 
 run{
     standardInput = System.in
+}
+
+shadowJar {
+    archiveFileName = 'Angela.jar';
 }
 
 checkstyle {
