@@ -27,7 +27,7 @@ public class Deadline extends Task {
 
     @Override
     public String toSaveFormat() {
-        return "D" + super.toSaveFormat() + "|" + DateTimeValueHandler.printDateTime(end);
+        return "D" + super.toSaveFormat() + "|" + DateTimeValueHandler.saveDateTime(end);
     }
 
     /**

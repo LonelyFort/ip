@@ -34,8 +34,8 @@ public class Event extends Task {
     @Override
     public String toSaveFormat() {
         return "E" + super.toSaveFormat() + "|"
-                + DateTimeValueHandler.printDateTime(start) + "|"
-                + DateTimeValueHandler.printDateTime(end);
+                + DateTimeValueHandler.saveDateTime(start) + "|"
+                + DateTimeValueHandler.saveDateTime(end);
     }
 
     /**
