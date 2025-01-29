@@ -1,8 +1,14 @@
 package Angela.exceptions.storage;
 
-public class UnreadableFileException extends Exception{
+public class UnreadableFileException extends Exception {
+    private int lineNum;
+
+    public UnreadableFileException(int lineNum) {
+        super();
+        this.lineNum = lineNum;
+    }
     @Override
     public String toString() {
-        return "Database contains unreadable entry. Database integrity may have been compromised Manager.";
+        return String.format("Database contains an uninterpretable entry at line %d.\n", this.lineNum);
     }
 }

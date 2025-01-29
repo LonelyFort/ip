@@ -10,6 +10,7 @@ import Angela.tasktype.Deadline;
 import Angela.tasktype.Event;
 import Angela.tasktype.ToDo;
 import Angela.util.DateTimeValueHandler;
+import Angela.UI.UI;
 
 import Angela.exceptions.storage.UnreadableFileException;
 
@@ -35,17 +36,19 @@ public class Database {
         try {
             BufferedReader fileInput = new BufferedReader(new FileReader(storagePath));
             String input = fileInput.readLine();
+            int lineNum = 1;
             while (input != null) {
-                savedTaskParser(input, taskList);
+                savedTaskParser(input, taskList, lineNum);
                 input = fileInput.readLine();
+                lineNum++;
             }
         } catch (IOException e) {
-            System.out.println("Error reading file.");
+            UI.displayError("An error has occurred while reading from saved file. Database integrity may have been compromised.");
         } catch (UnreadableFileException e) {
-            System.out.println(e);
+            UI.displayError(e);
         }
     }
-    public void savedTaskParser(String line, TaskList taskList) throws UnreadableFileException {
+    public void savedTaskParser(String line, TaskList taskList, int lineNum) throws UnreadableFileException {
         String[] split = line.split("\\|");
         boolean isCompleted = split[1].equals("X");
         String taskName = split[2];
@@ -59,7 +62,7 @@ public class Database {
             LocalDateTime end = DateTimeValueHandler.parseDateTime(split[4]);
             taskList.add(new Event(start, end, taskName, isCompleted));
         } else {
-            throw new UnreadableFileException();
+            throw new UnreadableFileException(lineNum);
         }
     }
 
@@ -70,7 +73,7 @@ public class Database {
             fileWriter.write(taskList.saveAllTask());
             fileWriter.close();
         } catch (IOException e) {
-            System.out.println("Error occurred while updating database.");
+            UI.displayError("Error occurred while updating database.");
         }
     }
 }
