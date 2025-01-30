@@ -46,8 +46,8 @@ public class Angela {
 
         while (true) {
             String input = scan.nextLine().strip();
-            // ignores comments
-            if (input.charAt(0) == '/') continue;
+            // ignores comments and empty lines
+            if (input.isEmpty() || input.charAt(0) == '/') continue;
             Command.chatResponse(input, this.listData, this.database);
         }
     }
