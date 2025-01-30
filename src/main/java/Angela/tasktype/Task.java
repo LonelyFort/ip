@@ -21,6 +21,12 @@ public class Task {
         this.isCompleted = false;
     }
 
+    /**
+     * An overloaded constructor for a general Task object with the specified end time, detail, and completion status.
+     *
+     * @param detail the detail or description of the task
+     * @param isCompleted the completion status of the task
+     */
     public Task(String detail, boolean isCompleted) {
         this.detail = detail;
         this.isCompleted = isCompleted;
@@ -59,6 +65,11 @@ public class Task {
         return isCompleted;
     }
 
+    /**
+     * Converts the Task into a specific string format for saving into the database.
+     *
+     * @return a string representation of the Task in the save format
+     */
     public String toSaveFormat() {
         return String.format("|%s|%s", completedSymbol(),this.detail);
     }

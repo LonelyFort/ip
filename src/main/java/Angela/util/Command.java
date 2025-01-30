@@ -20,6 +20,9 @@ import Angela.UI.UI;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 
+/**
+ * Command class to handle responses from console inputs.
+ */
 public class Command {
     // Commands
     private static final String[] TASK_CREATION_COMMANDS = {
@@ -78,12 +81,12 @@ public class Command {
      * The method can perform actions recognised in MODIFYTASKCOMMANDS array.
      * If the list is empty, a ListEmptyException is thrown.
      * If the input syntax is incorrect, a WrongSyntaxException is thrown.
-     * If the task index is invalid, an InvalidIndexException is thrown.
+     * If the task index is invalid or out of bounds, an InvalidIndexException is thrown.
      *
      * @param input the input string containing the action and task index
      * @throws WrongSyntaxException if the input syntax is incorrect
      * @throws ListEmptyException if the list data is empty
-     * @throws InvalidIndexException if the task index is invalid
+     * @throws InvalidIndexException if the task index is invalid, or out of bounds
      */
     private static void handleTaskModification(String input, TaskList listData, Database database) throws TaskModificationException {
         if (!input.contains(" ")) {

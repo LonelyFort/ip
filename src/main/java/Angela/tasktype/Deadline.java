@@ -20,11 +20,23 @@ public class Deadline extends Task {
          this.end = end;
     }
 
+    /**
+     * An overloaded constructor for a Deadline object with the specified end time, detail, and completion status.
+     *
+     * @param end the end time of the deadline
+     * @param detail the detail or description of the deadline
+     * @param isCompleted the completion status of the deadline
+     */
     public Deadline(LocalDateTime end, String detail, boolean isCompleted) {
         super(detail, isCompleted);
         this.end = end;
     }
 
+    /**
+     * Converts the Deadline task into a specific string format for saving into the database.
+     *
+     * @return a string representation of the Deadline in the save format
+     */
     @Override
     public String toSaveFormat() {
         return "D" + super.toSaveFormat() + "|" + DateTimeValueHandler.saveDateTime(end);

@@ -14,10 +14,21 @@ public class ToDo extends Task {
         super(detail);
     }
 
+    /**
+     * An overloaded constructor for a ToDo object with the specified end time, detail, and completion status.
+     *
+     * @param detail the detail or description of the ToDo
+     * @param isCompleted the completion status of the ToDo
+     */
     public ToDo(String detail, boolean isCompleted) {
         super(detail, isCompleted);
     }
 
+    /**
+     * Converts the ToDO task into a specific string format for saving into the database.
+     *
+     * @return a string representation of the ToDo in the save format
+     */
     @Override
     public String toSaveFormat() {
         return "T" + super.toSaveFormat();
