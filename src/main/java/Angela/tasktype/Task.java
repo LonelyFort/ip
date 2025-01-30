@@ -74,6 +74,10 @@ public class Task {
         return String.format("|%s|%s", completedSymbol(),this.detail);
     }
 
+    public boolean containsKeyword(String keyword) {
+        return this.detail.contains(keyword);
+    }
+
     /**
      * Returns a string representation of the task,
      * which includes the task detail and its completion status.
