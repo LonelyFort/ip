@@ -2,6 +2,7 @@ package Angela.util;
 
 import Angela.exceptions.chatresponse.ChatResponseException;
 import Angela.exceptions.printlist.EmptyListException;
+import Angela.exceptions.printlist.InvalidPrintSyntaxException;
 import Angela.exceptions.printlist.PrintListException;
 import Angela.exceptions.taskcreation.*;
 import Angela.exceptions.taskmodification.InvalidIndexException;
@@ -36,7 +37,8 @@ public class Command {
             "delete"
     };
     private static final String[] PRINT_COMMANDS = {
-            "list"
+            "list",
+            "find"
     };
 
     // List functions
@@ -62,15 +64,26 @@ public class Command {
     /**
      * Handles the printing of list data.
      * If the list is empty, an EmptyListException is thrown.
-     * Otherwise, it prints the current data from the database.
+     * Otherwise, it either prints the current data from the database,
+     * or it prints out the current data filtered by a specific keyword.
      *
      * @throws EmptyListException if the list data is empty
      */
-    private static void handlePrint(TaskList listData) throws PrintListException {
+    private static void handlePrint(String input, TaskList listData) throws PrintListException {
         if (listData.isEmpty()) {
             throw new EmptyListException();
         } else {
-            UI.displayResponse("Loading current data from database...\n" + listData.printList());
+
+            if (input.equals("list")) {
+                UI.displayResponse("Loading current data from database...\n" + listData.printList());
+            } else {
+                if (!input.contains(" ")) {
+                    throw new InvalidPrintSyntaxException();
+                }
+                String details = input.split(" ")[1];
+                UI.displayResponse("Loading current data from database that matched the keyword...\n" +
+                        listData.filterByKeyword(details));
+            }
         }
     }
 
@@ -210,7 +223,7 @@ public class Command {
 
         try {
             if (containsCommand(PRINT_COMMANDS, cmd)) {
-                handlePrint(listData);
+                handlePrint(input, listData);
             } else if (containsCommand(MODIFY_TASK_COMMANDS, cmd)) {
                 handleTaskModification(input, listData, database);
             } else if (containsCommand(TASK_CREATION_COMMANDS, cmd)) {

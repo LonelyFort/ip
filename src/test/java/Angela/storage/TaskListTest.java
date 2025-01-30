@@ -39,4 +39,16 @@ public class TaskListTest {
                 "E| |test3|2025-12-31 12:00|2025-12-31 12:00", threeItemList.saveAllTask());
 
     }
+
+    @Test
+    public void filterByKeywordTest() {
+        TaskList emptyList = new TaskList();
+        TaskList threeItemList = new TaskList();
+        threeItemList.add(new ToDo("test"));
+        threeItemList.add(new Deadline(LocalDateTime.of(2025, 12, 31, 0, 0),"test2"));
+        threeItemList.add(new Event(LocalDateTime.of(2025, 12, 31, 0, 0),LocalDateTime.of(2025, 12, 31, 0, 0) ,"test3"));
+
+        assertEquals("No entries in the list matches the keyword.", emptyList.filterByKeyword("test"));
+        assertEquals("1, [D][ ] test2 (by: 2025/12/31 12:00)", threeItemList.filterByKeyword("test2"));
+    }
 }

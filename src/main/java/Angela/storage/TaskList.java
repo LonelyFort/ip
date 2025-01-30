@@ -93,4 +93,26 @@ public class TaskList {
         }
         return stringBuilder.toString();
     }
+
+    /**
+     * Filters the tasks in the list by the specified keyword and returns a string representation of the filtered tasks.
+     * If no tasks match the keyword, a message indicating no matches is returned.
+     *
+     * @param keyword the keyword to filter tasks by
+     * @return a string representation of the filtered tasks, or a message if no tasks match the keyword
+     */
+    public String filterByKeyword(String keyword) {
+        TaskList filteredTaskList = new TaskList();
+
+        for (Task task : listData) {
+            if (task.containsKeyword(keyword)) {
+                filteredTaskList.add(task);
+            }
+        }
+        if (filteredTaskList.size() == 0) {
+            return "No entries in the list matches the keyword.";
+        }
+
+        return filteredTaskList.printList();
+    }
 }
