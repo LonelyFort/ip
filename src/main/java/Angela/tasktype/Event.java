@@ -25,12 +25,25 @@ public class Event extends Task {
         this.end = end;
     }
 
+    /**
+     * An overloaded constructor for a Event object with the specified end time, detail, and completion status.
+     *
+     * @param start the start time of the event
+     * @param end the end time of the event
+     * @param detail the detail or description of the event
+     * @param isCompleted the completion status of the event
+     */
     public Event(LocalDateTime start, LocalDateTime end, String detail, boolean isCompleted) {
         super(detail, isCompleted);
         this.start = start;
         this.end = end;
     }
 
+    /**
+     * Converts the Event task into a specific string format for saving into the database.
+     *
+     * @return a string representation of the Event in the save format
+     */
     @Override
     public String toSaveFormat() {
         return "E" + super.toSaveFormat() + "|"

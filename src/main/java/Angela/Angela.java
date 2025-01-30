@@ -8,27 +8,26 @@ import Angela.storage.TaskList;
 
 import java.util.Scanner;
 
+/**
+ * Main class of Angela
+ */
 public class Angela {
-    // Commands
-    private static final String[] TASK_CREATION_COMMANDS = {
-            "todo",
-            "deadline",
-            "event"
-    };
-    private static final String[] MODIFY_TASK_COMMANDS = {
-            "check",
-            "uncheck",
-            "delete"
-    };
-    private static final String[] PRINT_COMMANDS = {
-            "list"
-    };
 
     // private elements
     private Database database;
     private TaskList listData;
 
-    // Constructor
+    /**
+     * Constructs an instance of the Angela class with the specified file path.
+     * This constructor initializes the `listData` and `database` fields after a delay of 10 seconds.
+     * The `listData` is initialized as a new `TaskList` object, and the `database` is initialized
+     * as a new `Database` object using the provided file path and the `listData`.
+     *
+     * @param filePath The path to the file that will be used by the `Database` for storage or retrieval.
+     *                 This path is passed to the `Database` constructor.
+     * @see TaskList
+     * @see Database
+     */
     public Angela(String filePath) {
         setTimeout(() -> {
             this.listData = new TaskList();

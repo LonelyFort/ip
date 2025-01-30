@@ -14,10 +14,21 @@ import Angela.UI.UI;
 
 import Angela.exceptions.storage.UnreadableFileException;
 
-//Database Class inspired by Clifong StorageManager class
+/**
+ * Database class to save entries stored in taskList into a readable file. (e.g txt file)
+ * Solution inspired by Clifong's StorageManager https://github.com/Clifong/ip/blob/master/src/main/java/Acheron/Storage/StorageManager.java
+ */
 public class Database {
+    // stores the save path of the file
     private String storagePath;
 
+    /**
+     * Constructs a new Database instance, initializes the storage path,
+     * and loads tasks from the specified file.
+     *
+     * @param storagePath the path to the storage file
+     * @param taskList the list of tasks to be populated with data from the storage file
+     */
     public Database(String storagePath, TaskList taskList) {
         this.storagePath = storagePath;
 
@@ -48,6 +59,16 @@ public class Database {
             UI.displayError(e);
         }
     }
+
+    /**
+     * Parses a line of text representing a task and adds the task to the provided TaskList.
+     * The line is expected to be in a specific format, with fields separated by the '|' character.
+     *
+     * @param line the line of text representing the task
+     * @param taskList the list to which the parsed task will be added
+     * @param lineNum the line number of the task in the input file (used for error reporting)
+     * @throws UnreadableFileException if the line format is not recognized
+     */
     public void savedTaskParser(String line, TaskList taskList, int lineNum) throws UnreadableFileException {
         String[] split = line.split("\\|");
         boolean isCompleted = split[1].equals("X");
@@ -66,7 +87,11 @@ public class Database {
         }
     }
 
-    //Inspired by Clifong StorageManager updateSavedFile
+    /**
+     * Updates the saved tasks in the storage file with the current list of tasks.
+     *
+     * @param taskList the list of tasks to be saved to the storage file
+     */
     public void updateSavedTask(TaskList taskList)  {
         try {
             BufferedWriter fileWriter = new BufferedWriter(new FileWriter(this.storagePath, false));

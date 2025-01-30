@@ -34,6 +34,14 @@ public class DateTimeValueHandler {
         return dateFormatter.format(date);
     }
 
+    /**
+     * Converts a {@link LocalDateTime} object into a formatted string representation.
+     * The date and time are formatted using the pattern "yyyy-MM-dd hh:mm", which represents
+     * the year, month, day, hour, and minute in a human-readable format.
+     *
+     * @param date The {@link LocalDateTime} object to be formatted. Must not be null.
+     * @return A string representation of the provided date and time, formatted as "yyyy-MM-dd hh:mm".
+     */
     public static String saveDateTime(LocalDateTime date) {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm");
         return dateFormatter.format(date);
