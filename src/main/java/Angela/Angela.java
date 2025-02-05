@@ -1,9 +1,9 @@
 package Angela;
 
 import Angela.util.Command;
+import Angela.util.TimeOut;
 import Angela.storage.Database;
 import Angela.storage.TaskList;
-
 
 import java.util.Scanner;
 
@@ -15,6 +15,7 @@ public class Angela {
     // private elements
     private Database database;
     private TaskList listData;
+    private static String currentResponse;
 
     /**
      * Constructs an instance of the Angela class with the specified file path.
@@ -28,10 +29,25 @@ public class Angela {
      * @see Database
      */
     public Angela(String filePath) {
-        setTimeout(() -> {
+        TimeOut.setTimeout(() -> {
             this.listData = new TaskList();
             this.database = new Database(filePath, listData);
         }, 10000);
+    }
+
+    /**
+     * Constructs an instance of the Angela class with the specified file path.
+     * This constructor initializes the `listData` and `database` fields instantly for GUI Implementation.
+     * The `listData` is initialized as a new `TaskList` object, and the `database` is initialized
+     * as a new `Database` object using the provided file path and the `listData`.
+     * In this constructor, the filePath is pre-determined.
+     *
+     * @see TaskList
+     * @see Database
+     */
+    public Angela() {
+        this.listData = new TaskList();
+        this.database = new Database("savedFile/tasks.txt", listData);
     }
 
     /**
@@ -59,9 +75,9 @@ public class Angela {
      * ASCII art depicts Angela. from Lobotomy Corp.
      */
     private void greet() {
-        setTimeout(() -> System.out.println("Initiating..."), 1000);
-        setTimeout(() -> System.out.println("Application starting..."), 4000);
-        setTimeout(() -> System.out.println(
+        TimeOut.setTimeout(() -> System.out.println("Initiating..."), 1000);
+        TimeOut.setTimeout(() -> System.out.println("Application starting..."), 4000);
+        TimeOut.setTimeout(() -> System.out.println(
                 """
                                                   
                                                   @@@@@@@@@@                                           \s
@@ -164,28 +180,26 @@ public class Angela {
         ), 7000);
     }
 
-    //@@author Oleg Mikhailov-reused
-    //Reused from https://stackoverflow.com/questions/26311470/what-is-the-equivalent-of-javascript-settimeout-in-java
-    public static void setTimeout(Runnable runnable, int delay) {
-        new Thread(() -> {
-            try {
-                Thread.sleep(delay);
-                runnable.run();
-            } catch (Exception e) {
-                System.err.println(e);
-            }
-        }).start();
+    // GUI response
+    public String getResponse(String input) {
+        Command.chatResponse(input, this.listData, this.database);
+        return currentResponse;
     }
-    //@@author
+
+    // GUI set response
+    public static void setResponse(String response) {
+        currentResponse = response;
+    }
+
 
     /**
-     * Main method for Angela.
+     * Main method for Angela. This is used for CLI implementation.
      *
      * @param args
      */
     public static void main(String[] args) {
         Angela session = new Angela("savedFile/tasks.txt");
         session.greet();
-        setTimeout(() -> session.echo(), 10000);
+        TimeOut.setTimeout(() -> session.echo(), 10000);
     }
 }

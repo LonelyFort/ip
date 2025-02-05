@@ -16,7 +16,7 @@ import Angela.tasktype.Deadline;
 import Angela.tasktype.Event;
 import Angela.tasktype.ToDo;
 import Angela.util.DateTimeValueHandler;
-import Angela.ui.UI;
+import Angela.ui.GUI;
 
 import Angela.exceptions.storage.UnreadableFileException;
 
@@ -61,10 +61,10 @@ public class Database {
                 lineNum++;
             }
         } catch (IOException e) {
-            UI.displayError("An error has occurred while reading from saved file. " +
+            GUI.displayError("An error has occurred while reading from saved file. " +
                             "Database integrity may have been compromised.");
         } catch (UnreadableFileException e) {
-            UI.displayError(e);
+            GUI.displayError(e);
         }
     }
 
@@ -106,7 +106,7 @@ public class Database {
             fileWriter.write(taskList.saveAllTask());
             fileWriter.close();
         } catch (IOException e) {
-            UI.displayError("Error occurred while updating database.");
+            GUI.displayError("Error occurred while updating database.");
         }
     }
 }

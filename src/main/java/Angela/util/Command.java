@@ -20,7 +20,7 @@ import Angela.tasktype.Event;
 import Angela.tasktype.Task;
 import Angela.tasktype.ToDo;
 
-import Angela.ui.UI;
+import Angela.ui.GUI;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
@@ -79,13 +79,13 @@ public class Command {
         } else {
 
             if (input.equals("list")) {
-                UI.displayResponse("Loading current data from database...\n" + listData.printList());
+                GUI.displayResponse("Loading current data from database...\n" + listData.printList());
             } else {
                 if (!input.contains(" ")) {
                     throw new InvalidPrintSyntaxException();
                 }
                 String details = input.split(" ")[1];
-                UI.displayResponse("Loading current data from database that matched the keyword...\n" +
+                GUI.displayResponse("Loading current data from database that matched the keyword...\n" +
                         listData.filterByKeyword(details));
             }
         }
@@ -125,23 +125,23 @@ public class Command {
         Task taskItem = listData.get(index);
         if (action.equals("check")) {
             if (taskItem.isCompleted()) {
-                UI.displayResponse("Task has already been marked as completed Manager.");
+                GUI.displayResponse("Task has already been marked as completed Manager.");
             } else {
                 taskItem.check();
-                UI.displayResponse("Request received. Marking the following task as completed:\n" + taskItem);
+                GUI.displayResponse("Request received. Marking the following task as completed:\n" + taskItem);
                 database.updateSavedTask(listData);
             }
         } else if (action.equals("uncheck")){
             if (!taskItem.isCompleted()) {
-                UI.displayResponse("Task has already been marked as incomplete Manager.");
+                GUI.displayResponse("Task has already been marked as incomplete Manager.");
             } else {
                 taskItem.uncheck();
-                UI.displayResponse("Request received. Marking the following task as incomplete:\n" + taskItem);
+                GUI.displayResponse("Request received. Marking the following task as incomplete:\n" + taskItem);
                 database.updateSavedTask(listData);
             }
         } else {
             listData.remove(index);
-            UI.displayResponse(
+            GUI.displayResponse(
                     "Request received. Removing the following task from the database: \n\n" +
                             "   " + taskItem + "\n\n" +
                             "You have " + listData.size() + " tasks on the list."
@@ -206,7 +206,7 @@ public class Command {
             newTask = new Event(startDateTime, endDateTime, taskDesc);
         }
         listData.add(newTask);
-        UI.displayResponse(
+        GUI.displayResponse(
                 "Request received. Adding the following task into the database: \n\n" +
                         "   " + newTask + "\n\n" +
                         "You have " + listData.size() + " tasks on the list."
@@ -232,14 +232,14 @@ public class Command {
                 handleTaskModification(input, listData, database);
             } else if (containsCommand(TASK_CREATION_COMMANDS, cmd)) {
                 handleTaskCreation(input, listData, database);
-            } else if (cmd.contains("bye")) {
-                UI.displayResponse("Initiating shutdown protocol...");
-                System.exit(0);
+            } else if (cmd.contains("exit")) {
+                GUI.displayResponse("Initiating shutdown protocol...");
+                TimeOut.setTimeout(() -> System.exit(0), 1000);
             } else {
                 throw new ChatResponseException();
             }
         } catch (Exception e) {
-            UI.displayError(e);
+            GUI.displayError(e);
         }
     }
 }
