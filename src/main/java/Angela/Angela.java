@@ -47,7 +47,9 @@ public class Angela {
         while (true) {
             String input = scan.nextLine().strip();
             // ignores comments and empty lines
-            if (input.isEmpty() || input.charAt(0) == '/') continue;
+            if (input.isEmpty() || input.charAt(0) == '/') {
+                continue;
+            }
             Command.chatResponse(input, this.listData, this.database);
         }
     }
@@ -165,13 +167,13 @@ public class Angela {
 
     //@@author Oleg Mikhailov-reused
     //Reused from https://stackoverflow.com/questions/26311470/what-is-the-equivalent-of-javascript-settimeout-in-java
-    public static void setTimeout(Runnable runnable, int delay){
+    public static void setTimeout(Runnable runnable, int delay) {
         new Thread(() -> {
             try {
                 Thread.sleep(delay);
                 runnable.run();
             }
-            catch (Exception e){
+            catch (Exception e) {
                 System.err.println(e);
             }
         }).start();
@@ -180,6 +182,7 @@ public class Angela {
 
     /**
      * Main method for Angela.
+     *
      * @param args
      */
     public static void main(String[] args) {
