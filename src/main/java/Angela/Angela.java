@@ -172,21 +172,42 @@ public class Angela {
                         
                         
                 Welcome, Manager. I am your assistant AI, Angela.
-                I am here to support you as it's your first day. 
+                I am here to support you as it's your first day.
                 I will provide practical advice and emotional support until you get used to your work.
                 
-                What is your request?                        
+                What is your request?
                 """
         ), 7000);
     }
 
-    // GUI response
+    /**
+     * Generates a greeting message for the GUI.
+     *
+     * @return a personalized welcome message for the manager.
+     */
+    public String greetGUI() {
+        return "Welcome, Manager. I am your assistant AI, Angela. " +
+                "I am here to support you as it's your first day.\n" +
+                "I will provide practical advice and emotional support until you get used to your work. \n\n" +
+                "What is your request?";
+    }
+
+    /**
+     * Returns the response text of Angela to be displayed onto the GUI.
+     *
+     * @param input the command or query input to process.
+     * @return the response generated based on the input.
+     */
     public String getResponse(String input) {
         Command.chatResponse(input, this.listData, this.database);
         return currentResponse;
     }
 
-    // GUI set response
+    /**
+     * Sets the response that Angela will reply onto the GUI.
+     *
+     * @param response the command or query input to process.
+     */
     public static void setResponse(String response) {
         currentResponse = response;
     }

@@ -25,14 +25,17 @@ public class DialogBox extends HBox {
     @FXML
     private ImageView displayPicture;
 
+    /**
+     * Main constructor for the dialog box.
+     * @param text
+     * @param img
+     */
     private DialogBox(String text, Image img) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource("/view/DialogBox.fxml"));
             fxmlLoader.setController(this);
             fxmlLoader.setRoot(this);
             fxmlLoader.load();
-
-            //Upscale image
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -53,10 +56,22 @@ public class DialogBox extends HBox {
         dialog.getStyleClass().add("reply-label");
     }
 
+    /**
+     * Handles the character and text display of users in the GUI.
+     * @param text to be displayed onto the GUI
+     * @param img user profile image
+     * @return DialogBox instance that contains user profile image and textbox.
+     */
     public static DialogBox getUserDialog(String text, Image img) {
         return new DialogBox(text, img);
     }
 
+    /**
+     * Handles the character and text display of Angela in the GUI.
+     * @param text to be displayed onto GUI
+     * @param img image of Angela
+     * @return DialogBox instance that contains image of Angela and textbox.
+     */
     public static DialogBox getAngelaDialog(String text, Image img) {
         var db = new DialogBox(text, img);
         db.flip();

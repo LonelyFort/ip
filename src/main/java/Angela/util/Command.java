@@ -45,6 +45,24 @@ public class Command {
             "find"
     };
 
+    // Inputs that returns special response from Angela.
+    private static final String[] EASTER_EGG_COMMANDS = {
+            "ayin",
+            "hello",
+            "hi",
+            "hey",
+            "malkuth",
+            "yesod",
+            "hod",
+            "netzach",
+            "tiphereth",
+            "gebura",
+            "chesed",
+            "hokma",
+            "binah",
+            "x"
+    };
+
     // List functions
 
     /**
@@ -77,14 +95,18 @@ public class Command {
         if (listData.isEmpty()) {
             throw new EmptyListException();
         } else {
-
             if (input.equals("list")) {
                 GUI.displayResponse("Loading current data from database...\n" + listData.printList());
             } else {
                 if (!input.contains(" ")) {
                     throw new InvalidPrintSyntaxException();
                 }
-                String details = input.split(" ")[1];
+                String[] inputSections = input.split(" ");
+                String command = inputSections[0];
+                if (!command.equals("find")) {
+                    throw new InvalidPrintSyntaxException();
+                }
+                String details = inputSections[1];
                 GUI.displayResponse("Loading current data from database that matched the keyword...\n" +
                         listData.filterByKeyword(details));
             }
@@ -215,6 +237,48 @@ public class Command {
     }
 
     /**
+     * Handles special responses Angela will reply upon receiving the following command.
+     * These are some major spoilers for Lobotomy Corp, so if you are keen to play
+     * the game, I suggest you do not search these terms online.
+     * Throws ChatResponseException if special command contains more than just
+     * the command itself.
+     *
+     * @param input the input string containing the easter egg command.
+     * @throws ChatResponseException if input does not match easter egg commands.
+     */
+    private static void handleEasterEgg(String input) throws ChatResponseException {
+        if (input.equals("ayin")) {
+            GUI.displayResponse("We do not speak about that man here.");
+        } else if (input.equals("hello") || input.equals("hi") || input.equals("hey")) {
+            GUI.displayResponse("Greetings.");
+        } else if (input.equals("malkuth")) {
+            GUI.displayResponse("Control team is doing well. Thanks for asking.");
+        } else if (input.equals("yesod")) {
+            GUI.displayResponse("Some Abnormalities has broken out," +
+                    " but has been suppressed quickly thanks to Yesod.");
+        } else if (input.equals("hod")) {
+            GUI.displayResponse("Unfortunately we have to decline the counseling program for the employees.");
+        } else if (input.equals("netzach")) {
+            GUI.displayResponse("Overdosed on Enkephalin.");
+        } else if (input.equals("tiphereth")) {
+            GUI.displayResponse("Tiphereth B has been experiencing anomalies in behaviour. I have sent him for reset.");
+        } else if (input.equals("gebura")) {
+            GUI.displayResponse("Nothing there has breached once again. Deploying the Rabbits.");
+        } else if (input.equals("chesed")) {
+            GUI.displayResponse("You need to understand Chesed. Suffering of the employees is crucial for the company's" +
+                    "success.");
+        } else if (input.equals("binah")) {
+            GUI.displayResponse("Forever trapped in a jail that is the bottom of the lab.");
+        } else if (input.equals("hokma")) {
+            GUI.displayResponse("Still believe in Ayin after all these times?");
+        } else if (input.equals("x")) {
+            GUI.displayResponse("That's your name, Manager.");
+        } else {
+            throw new ChatResponseException();
+        }
+    }
+
+    /**
      * Handles the response to a chat command input.
      * It determines the command from the input and delegates the task to the appropriate handler.
      * Supported commands include print, modify task, task creation, and shutdown.
@@ -232,6 +296,8 @@ public class Command {
                 handleTaskModification(input, listData, database);
             } else if (containsCommand(TASK_CREATION_COMMANDS, cmd)) {
                 handleTaskCreation(input, listData, database);
+            } else if (containsCommand(EASTER_EGG_COMMANDS, cmd)) {
+              handleEasterEgg(input);
             } else if (cmd.contains("exit")) {
                 GUI.displayResponse("Initiating shutdown protocol...");
                 TimeOut.setTimeout(() -> System.exit(0), 1000);

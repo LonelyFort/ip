@@ -9,6 +9,9 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+/**
+ * Main component for the GUI.
+ */
 public class App extends Application {
 
     private Angela session = new Angela();
