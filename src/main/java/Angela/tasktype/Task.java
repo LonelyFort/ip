@@ -71,7 +71,7 @@ public class Task {
      * @return a string representation of the Task in the save format
      */
     public String toSaveFormat() {
-        return String.format("|%s|%s", completedSymbol(),this.detail);
+        return String.format("|%s|%s", completedSymbol(), this.detail);
     }
 
     public boolean containsKeyword(String keyword) {

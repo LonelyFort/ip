@@ -1,4 +1,4 @@
-package Angela.UI;
+package Angela.ui;
 
 /**
  * UI class to handle display of responses in the console.

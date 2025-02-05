@@ -16,13 +16,14 @@ import Angela.tasktype.Deadline;
 import Angela.tasktype.Event;
 import Angela.tasktype.ToDo;
 import Angela.util.DateTimeValueHandler;
-import Angela.UI.UI;
+import Angela.ui.UI;
 
 import Angela.exceptions.storage.UnreadableFileException;
 
 /**
  * Database class to save entries stored in taskList into a readable file. (e.g txt file)
- * Solution inspired by Clifong's StorageManager https://github.com/Clifong/ip/blob/master/src/main/java/Acheron/Storage/StorageManager.java
+ * Solution inspired by Clifong's StorageManager
+ * https://github.com/Clifong/ip/blob/master/src/main/java/Acheron/Storage/StorageManager.java
  */
 public class Database {
     // stores the save path of the file
@@ -60,7 +61,8 @@ public class Database {
                 lineNum++;
             }
         } catch (IOException e) {
-            UI.displayError("An error has occurred while reading from saved file. Database integrity may have been compromised.");
+            UI.displayError("An error has occurred while reading from saved file. " +
+                            "Database integrity may have been compromised.");
         } catch (UnreadableFileException e) {
             UI.displayError(e);
         }
@@ -98,7 +100,7 @@ public class Database {
      *
      * @param taskList the list of tasks to be saved to the storage file
      */
-    public void updateSavedTask(TaskList taskList)  {
+    public void updateSavedTask(TaskList taskList) {
         try {
             BufferedWriter fileWriter = new BufferedWriter(new FileWriter(this.storagePath, false));
             fileWriter.write(taskList.saveAllTask());

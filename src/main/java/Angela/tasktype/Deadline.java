@@ -16,8 +16,8 @@ public class Deadline extends Task {
      * @param detail The details of the task.
      */
     public Deadline(LocalDateTime end, String detail) {
-         super(detail);
-         this.end = end;
+        super(detail);
+        this.end = end;
     }
 
     /**
@@ -50,6 +50,6 @@ public class Deadline extends Task {
      */
     @Override
     public String toString() {
-         return String.format("[D]%s (by: %s)", super.toString(), DateTimeValueHandler.printDateTime(end));
+        return String.format("[D]%s (by: %s)", super.toString(), DateTimeValueHandler.printDateTime(end));
     }
 }

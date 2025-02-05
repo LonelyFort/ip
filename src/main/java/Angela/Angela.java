@@ -1,7 +1,6 @@
 package Angela;
 
 import Angela.util.Command;
-
 import Angela.storage.Database;
 import Angela.storage.TaskList;
 
@@ -172,8 +171,7 @@ public class Angela {
             try {
                 Thread.sleep(delay);
                 runnable.run();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 System.err.println(e);
             }
         }).start();
