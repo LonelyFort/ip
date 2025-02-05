@@ -32,7 +32,7 @@ public class Angela {
         setTimeout(() -> {
             this.listData = new TaskList();
             this.database = new Database(filePath, listData);
-        },10000);
+        }, 10000);
     }
 
     /**
