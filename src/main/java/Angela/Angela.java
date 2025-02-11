@@ -1,11 +1,11 @@
 package Angela;
 
-import Angela.util.Command;
-import Angela.util.TimeOut;
+import java.util.Scanner;
+
 import Angela.storage.Database;
 import Angela.storage.TaskList;
-
-import java.util.Scanner;
+import Angela.util.Command;
+import Angela.util.TimeOut;
 
 /**
  * Main class of Angela
@@ -13,10 +13,9 @@ import java.util.Scanner;
 public class Angela {
 
     // private elements
+    private static String currentResponse;
     private Database database;
     private TaskList listData;
-    private static String currentResponse;
-
     /**
      * Constructs an instance of the Angela class with the specified file path.
      * This constructor initializes the `listData` and `database` fields after a delay of 10 seconds.
@@ -185,7 +184,7 @@ public class Angela {
      *
      * @return a personalized welcome message for the manager.
      */
-    public String greetGUI() {
+    public String greetGui() {
         return "Welcome, Manager. I am your assistant AI, Angela. " +
                 "I am here to support you as it's your first day.\n" +
                 "I will provide practical advice and emotional support until you get used to your work. \n\n" +

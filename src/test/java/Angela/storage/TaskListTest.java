@@ -17,7 +17,8 @@ public class TaskListTest {
         TaskList threeItemList = new TaskList();
         threeItemList.add(new ToDo("test"));
         threeItemList.add(new Deadline(LocalDateTime.of(2025, 12, 31, 0, 0), "test2"));
-        threeItemList.add(new Event(LocalDateTime.of(2025, 12, 31, 0, 0), LocalDateTime.of(2025, 12, 31, 0, 0), "test3"));
+        threeItemList.add(new Event(LocalDateTime.of(2025, 12, 31, 0, 0),
+                LocalDateTime.of(2025, 12, 31, 0, 0), "test3"));
 
         assertEquals("", emptyList.printList());
         assertEquals("1, [T][ ] test\n" +
