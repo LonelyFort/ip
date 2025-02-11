@@ -1,20 +1,25 @@
 package Angela.util;
 
 import Angela.exceptions.chatresponse.ChatResponseException;
+
 import Angela.exceptions.printlist.EmptyListException;
 import Angela.exceptions.printlist.InvalidPrintSyntaxException;
 import Angela.exceptions.printlist.PrintListException;
+
 import Angela.exceptions.taskcreation.DateOrderException;
 import Angela.exceptions.taskcreation.InvalidSyntaxException;
 import Angela.exceptions.taskcreation.EmptyDetailException;
 import Angela.exceptions.taskcreation.InvalidDateException;
 import Angela.exceptions.taskcreation.TaskCreationException;
+
 import Angela.exceptions.taskmodification.InvalidIndexException;
 import Angela.exceptions.taskmodification.ListEmptyException;
 import Angela.exceptions.taskmodification.TaskModificationException;
 import Angela.exceptions.taskmodification.WrongSyntaxException;
+
 import Angela.storage.Database;
 import Angela.storage.TaskList;
+
 import Angela.tasktype.Deadline;
 import Angela.tasktype.Event;
 import Angela.tasktype.Task;
@@ -94,22 +99,24 @@ public class Command {
     private static void handlePrint(String input, TaskList listData) throws PrintListException {
         if (listData.isEmpty()) {
             throw new EmptyListException();
+        }
+
+        if (input.equals("list")) {
+            GUI.displayResponse("Loading current data from database...\n" + listData.printList());
         } else {
-            if (input.equals("list")) {
-                GUI.displayResponse("Loading current data from database...\n" + listData.printList());
-            } else {
-                if (!input.contains(" ")) {
-                    throw new InvalidPrintSyntaxException();
-                }
-                String[] inputSections = input.split(" ");
-                String command = inputSections[0];
-                if (!command.equals("find")) {
-                    throw new InvalidPrintSyntaxException();
-                }
-                String details = inputSections[1];
-                GUI.displayResponse("Loading current data from database that matched the keyword...\n" +
-                        listData.filterByKeyword(details));
+            if (!input.contains(" ")) {
+                throw new InvalidPrintSyntaxException();
             }
+
+            String[] inputSections = input.split(" ");
+            String command = inputSections[0];
+            if (inputSections.length == 1 ||!command.equals("find")) {
+                throw new InvalidPrintSyntaxException();
+            }
+
+            String details = inputSections[1];
+            GUI.displayResponse("Loading current data from database that matched the keyword...\n" +
+                    listData.filterByKeyword(details));
         }
     }
 
@@ -134,16 +141,19 @@ public class Command {
         if (listData.isEmpty()) {
             throw new ListEmptyException();
         }
+
         String action = input.substring(0, input.indexOf(" "));
         String details = input.substring(input.indexOf(" ") + 1);
         // Regex will check if details contains only numbers
         if (!details.matches("^\\d+$")) {
             throw new WrongSyntaxException();
         }
+
         int index = Integer.parseInt(details) - 1;
         if (index < 0 || index >= listData.size()) {
             throw new InvalidIndexException(listData.size());
         }
+
         Task taskItem = listData.get(index);
         if (action.equals("check")) {
             if (taskItem.isCompleted()) {
@@ -161,7 +171,7 @@ public class Command {
                 GUI.displayResponse("Request received. Marking the following task as incomplete:\n" + taskItem);
                 database.updateSavedTask(listData);
             }
-        } else {
+        } else if (action.equals("remove")){
             listData.remove(index);
             GUI.displayResponse(
                     "Request received. Removing the following task from the database: \n\n" +
@@ -169,6 +179,8 @@ public class Command {
                             "You have " + listData.size() + " tasks on the list."
             );
             database.updateSavedTask(listData);
+        } else {
+            throw new TaskModificationException();
         }
     }
 
@@ -189,43 +201,54 @@ public class Command {
         if (!input.contains(" ")) {
             throw new EmptyDetailException();
         }
+
         String cmd = input.substring(0, input.indexOf(" ")).toLowerCase();
         String details = input.substring(input.indexOf(" ") + 1).strip();
         Task newTask;
+
         if (cmd.equals("todo")) {
             newTask = new ToDo(details);
         } else if (cmd.equals("deadline")) {
             if (!details.contains("by:")) {
                 throw new InvalidSyntaxException(cmd);
             }
+
             String taskDesc = details.substring(0, details.indexOf("by:"));
             String end = details.substring(details.indexOf("by:") + 3).strip();
             LocalDateTime endDateTime;
+
             try {
                 endDateTime = DateTimeValueHandler.parseDateTime(end);
             } catch (DateTimeParseException e) {
                 throw new InvalidDateException();
             }
+
             newTask = new Deadline(endDateTime, taskDesc);
-        } else {
+        } else if (cmd.equals("event")) {
             if (!details.contains("from:") || !details.contains("to:")) {
                 throw new InvalidSyntaxException(cmd);
             }
+
             String taskDesc = details.substring(0, details.indexOf("from:"));
             String start = details.substring(details.indexOf("from:") + 5, details.indexOf("to:")).strip();
             String end = details.substring(details.indexOf("to:") + 3).strip();
             LocalDateTime startDateTime;
             LocalDateTime endDateTime;
+
             try {
                 startDateTime = DateTimeValueHandler.parseDateTime(start);
                 endDateTime = DateTimeValueHandler.parseDateTime(end);
             } catch (DateTimeParseException e) {
                 throw new InvalidDateException();
             }
+
             if (endDateTime.isBefore(startDateTime)) {
                 throw new DateOrderException();
             }
+
             newTask = new Event(startDateTime, endDateTime, taskDesc);
+        } else {
+            throw new TaskCreationException();
         }
         listData.add(newTask);
         GUI.displayResponse(
@@ -297,7 +320,7 @@ public class Command {
             } else if (containsCommand(TASK_CREATION_COMMANDS, cmd)) {
                 handleTaskCreation(input, listData, database);
             } else if (containsCommand(EASTER_EGG_COMMANDS, cmd)) {
-              handleEasterEgg(input);
+                handleEasterEgg(input);
             } else if (cmd.contains("exit")) {
                 GUI.displayResponse("Initiating shutdown protocol...");
                 TimeOut.setTimeout(() -> System.exit(0), 1000);

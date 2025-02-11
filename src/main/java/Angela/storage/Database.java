@@ -51,10 +51,12 @@ public class Database {
                 System.out.println("An error has occurred while creating folder. Check system settings Manager.");
             }
         }
+
         try {
             BufferedReader fileInput = new BufferedReader(new FileReader(storagePath));
             String input = fileInput.readLine();
             int lineNum = 1;
+
             while (input != null) {
                 savedTaskParser(input, taskList, lineNum);
                 input = fileInput.readLine();
@@ -81,6 +83,7 @@ public class Database {
         String[] split = line.split("\\|");
         boolean isCompleted = split[1].equals("X");
         String taskName = split[2];
+
         if (split[0].equals("T")) {
             taskList.add(new ToDo(taskName, isCompleted));
         } else if (split[0].equals("D")) {
