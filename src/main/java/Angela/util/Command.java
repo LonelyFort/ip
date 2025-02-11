@@ -176,7 +176,7 @@ public class Command {
                 GUI.displayResponse("Request received. Marking the following task as incomplete:\n" + taskItem);
                 database.updateSavedTask(listData);
             }
-        } else if (command.equals("remove")) {
+        } else if (command.equals("delete")) {
             listData.remove(index);
             GUI.displayResponse(
                     "Request received. Removing the following task from the database: \n\n" +
