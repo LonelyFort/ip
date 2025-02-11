@@ -108,15 +108,20 @@ public class Command {
                 throw new InvalidPrintSyntaxException();
             }
 
-            String[] inputSections = input.split(" ");
-            String command = inputSections[0];
-            if (inputSections.length == 1 ||!command.equals("find")) {
+            String command = input.substring(0, input.indexOf(" ")).toLowerCase();
+            assert containsCommand(PRINT_COMMANDS, command) : "Incorrectly passed non-printing " +
+                    "commands to handle print function.";
+            String keywords = input.substring(input.indexOf(" ") + 1).strip();
+            if (keywords.isEmpty()) {
                 throw new InvalidPrintSyntaxException();
             }
 
-            String details = inputSections[1];
-            GUI.displayResponse("Loading current data from database that matched the keyword...\n" +
-                    listData.filterByKeyword(details));
+            if (command.equals("find")) {
+                GUI.displayResponse("Loading current data from database that matched the keyword...\n" +
+                    listData.filterByKeyword(keywords));
+            } else {
+                throw new InvalidPrintSyntaxException();
+            }
         }
     }
 
@@ -143,6 +148,8 @@ public class Command {
         }
 
         String action = input.substring(0, input.indexOf(" "));
+        assert containsCommand(MODIFY_TASK_COMMANDS, action) : "Incorrectly passed non-modification " +
+                "commands to handle task modification function.";
         String details = input.substring(input.indexOf(" ") + 1);
         // Regex will check if details contains only numbers
         if (!details.matches("^\\d+$")) {
@@ -203,6 +210,8 @@ public class Command {
         }
 
         String cmd = input.substring(0, input.indexOf(" ")).toLowerCase();
+        assert containsCommand(TASK_CREATION_COMMANDS, cmd) : "Incorrectly passed non-task creation " +
+                "commands to handle task creation function.";
         String details = input.substring(input.indexOf(" ") + 1).strip();
         Task newTask;
 
