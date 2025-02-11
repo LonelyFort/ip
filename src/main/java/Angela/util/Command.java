@@ -29,6 +29,7 @@ import Angela.ui.GUI;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.Arrays;
 
 /**
  * Command class to handle responses from console inputs.
@@ -78,12 +79,7 @@ public class Command {
      * @return true if the command is found in the list, false otherwise
      */
     private static boolean containsCommand(String[] cmdList, String cmd) {
-        for (String cmdItem : cmdList) {
-            if (cmd.equals(cmdItem)) {
-                return true;
-            }
-        }
-        return false;
+        return Arrays.stream(cmdList).anyMatch((cmdItem) -> cmd.equals(cmdItem));
     }
 
     // Chat response functions
