@@ -109,6 +109,7 @@ public class TaskList {
                 filteredTaskList.add(task);
             }
         }
+        
         if (filteredTaskList.size() == 0) {
             return "No entries in the list matches the keyword.";
         }
