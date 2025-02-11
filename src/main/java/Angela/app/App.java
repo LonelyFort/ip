@@ -24,14 +24,11 @@ public class App extends Application {
             AnchorPane ap = fxmlLoader.load();
             Scene scene = new Scene(ap);
             stage.setScene(scene);
-<<<<<<< HEAD
             fxmlLoader.<MainWindow>getController().setSession(session); // inject the Angela instance
-=======
             stage.setTitle("Angela");
             Image icon = new Image(getClass().getResourceAsStream("/images/lobcorp_logo.png"));
             stage.getIcons().add(icon);
             fxmlLoader.<MainWindow>getController().setSession(session);  // inject the Angela instance
->>>>>>> master
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

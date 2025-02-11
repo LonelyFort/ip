@@ -147,13 +147,11 @@ public class Command {
             throw new ListEmptyException();
         }
 
-<<<<<<< HEAD
         String command = input.substring(0, input.indexOf(" "));
-=======
         String action = input.substring(0, input.indexOf(" "));
         assert containsCommand(MODIFY_TASK_COMMANDS, action) : "Incorrectly passed non-modification " +
                 "commands to handle task modification function.";
->>>>>>> master
+
         String details = input.substring(input.indexOf(" ") + 1);
         // Regex will check if details contains only numbers
         if (!details.matches("^\\d+$")) {
