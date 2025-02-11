@@ -261,6 +261,7 @@ public class Command {
         } else {
             throw new TaskCreationException();
         }
+        
         listData.add(newTask);
         GUI.displayResponse(
                 "Request received. Adding the following task into the database: \n\n" +
