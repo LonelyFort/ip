@@ -185,6 +185,7 @@ public class Command {
                             "   " + taskItem + "\n\n" +
                             "You have " + listData.size() + " tasks on the list."
             );
+            
             database.updateSavedTask(listData);
         } else {
             throw new TaskModificationException();
