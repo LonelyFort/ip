@@ -147,9 +147,11 @@ public class Command {
             throw new ListEmptyException();
         }
 
+        String command = input.substring(0, input.indexOf(" "));
         String action = input.substring(0, input.indexOf(" "));
         assert containsCommand(MODIFY_TASK_COMMANDS, action) : "Incorrectly passed non-modification " +
                 "commands to handle task modification function.";
+
         String details = input.substring(input.indexOf(" ") + 1);
         // Regex will check if details contains only numbers
         if (!details.matches("^\\d+$")) {
@@ -162,7 +164,7 @@ public class Command {
         }
 
         Task taskItem = listData.get(index);
-        if (action.equals("check")) {
+        if (command.equals("check")) {
             if (taskItem.isCompleted()) {
                 GUI.displayResponse("Task has already been marked as completed Manager.");
             } else {
@@ -170,7 +172,7 @@ public class Command {
                 GUI.displayResponse("Request received. Marking the following task as completed:\n" + taskItem);
                 database.updateSavedTask(listData);
             }
-        } else if (action.equals("uncheck")){
+        } else if (command.equals("uncheck")) {
             if (!taskItem.isCompleted()) {
                 GUI.displayResponse("Task has already been marked as incomplete Manager.");
             } else {
@@ -178,7 +180,7 @@ public class Command {
                 GUI.displayResponse("Request received. Marking the following task as incomplete:\n" + taskItem);
                 database.updateSavedTask(listData);
             }
-        } else if (action.equals("remove")){
+        } else if (command.equals("remove")) {
             listData.remove(index);
             GUI.displayResponse(
                     "Request received. Removing the following task from the database: \n\n" +
@@ -297,8 +299,8 @@ public class Command {
         } else if (input.equals("gebura")) {
             GUI.displayResponse("Nothing there has breached once again. Deploying the Rabbits.");
         } else if (input.equals("chesed")) {
-            GUI.displayResponse("You need to understand Chesed. Suffering of the employees is crucial for the company's" +
-                    "success.");
+            GUI.displayResponse("You need to understand Chesed. Suffering of the employees is " +
+                    "crucial for the company's success.");
         } else if (input.equals("binah")) {
             GUI.displayResponse("Forever trapped in a jail that is the bottom of the lab.");
         } else if (input.equals("hokma")) {

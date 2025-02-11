@@ -35,7 +35,7 @@ public class MainWindow extends AnchorPane {
     /** Injects the Angela instance */
     public void setSession(Angela angela) {
         this.angela = angela;
-        String greet = this.angela.greetGUI();
+        String greet = this.angela.greetGui();
         dialogContainer.getChildren().add(DialogBox.getAngelaDialog(greet, angelaImage));
     }
 
