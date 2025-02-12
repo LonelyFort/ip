@@ -212,6 +212,9 @@ public class Command {
         assert containsCommand(TASK_CREATION_COMMANDS, cmd) : "Incorrectly passed non-task creation " +
                 "commands to handle task creation function.";
         String details = input.substring(input.indexOf(" ") + 1).strip();
+        if (details.isEmpty()) {
+            throw new EmptyDetailException();
+        }
         Task newTask;
 
         if (cmd.equals("todo")) {

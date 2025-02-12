@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'application'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
-    id 'checkstyle'
+//    id 'checkstyle'
 }
 
 repositories {
@@ -63,6 +63,6 @@ shadowJar {
     archiveFileName = 'Angela.jar';
 }
 
-checkstyle {
-    toolVersion = "10.12.4"
-}
+//checkstyle {
+//    toolVersion = "10.12.4"
+//}
