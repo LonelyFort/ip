@@ -47,7 +47,7 @@ public class Event extends Task {
      */
     @Override
     public String toSaveFormat() {
-        return "E" + super.importantMark() + super.toSaveFormat() + "|"
+        return "E" + super.toSaveFormat() + "|"
                 + DateTimeValueHandler.saveDateTime(start) + "|"
                 + DateTimeValueHandler.saveDateTime(end);
     }

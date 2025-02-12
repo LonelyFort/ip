@@ -123,14 +123,16 @@ public class Command {
             throw new EmptyListException();
         }
 
+        String noWhiteSpaceInput = input.strip().toLowerCase();
+
         //case statements
-        boolean isPrintListInput = input.equals("list") || input.equals("l");
-        boolean isFindImptInput = input.equals("findi") || input.equals("fi");
+        boolean isPrintListInput = noWhiteSpaceInput.equals("list") || noWhiteSpaceInput.equals("l");
+        boolean isFindImptInput = noWhiteSpaceInput.equals("findi") || noWhiteSpaceInput.equals("fi");
 
         if (isPrintListInput) {
             GUI.displayResponse("Loading current data from database...\n" + listData.printList());
         } else if (isFindImptInput) {
-            GUI.displayResponse("Load current data from database...\n" + listData.printFilterByImportanceList());
+            GUI.displayResponse("Loading current data from database...\n" + listData.printFilterByImportanceList());
         } else {
             if (!input.contains(" ")) {
                 throw new InvalidPrintSyntaxException();
@@ -181,9 +183,8 @@ public class Command {
             throw new ListEmptyException();
         }
 
-        String command = input.substring(0, input.indexOf(" "));
-        String action = input.substring(0, input.indexOf(" "));
-        assert containsCommand(MODIFY_TASK_COMMANDS, action) : "Incorrectly passed non-modification " +
+        String command = input.substring(0, input.indexOf(" ")).toLowerCase();
+        assert containsCommand(MODIFY_TASK_COMMANDS, command) : "Incorrectly passed non-modification " +
                 "commands to handle task modification function.";
 
         String details = input.substring(input.indexOf(" ") + 1);
@@ -283,6 +284,7 @@ public class Command {
             throw new EmptyDetailException();
         }
         Task newTask;
+        String taskType;
 
         // case statements
         boolean isTodoTask = cmd.equals("todo") || cmd.equals("todoi")
@@ -294,6 +296,7 @@ public class Command {
 
         if (isTodoTask) {
             newTask = new ToDo(details, isImportant);
+            taskType = "todo";
         } else if (isDeadlineTask) {
             if (!details.contains("by:")) {
                 throw new InvalidSyntaxException(cmd);
@@ -310,6 +313,7 @@ public class Command {
             }
 
             newTask = new Deadline(endDateTime, taskDesc, isImportant);
+            taskType = "deadline";
         } else if (isEventTask) {
             if (!details.contains("from:") || !details.contains("to:")) {
                 throw new InvalidSyntaxException(cmd);
@@ -333,13 +337,14 @@ public class Command {
             }
 
             newTask = new Event(startDateTime, endDateTime, taskDesc, isImportant);
+            taskType = "event";
         } else {
             throw new TaskCreationException();
         }
         
         listData.add(newTask);
         GUI.displayResponse(
-                "Request received. Adding the following task into the database: \n\n" +
+                "Request received. Adding the following " + taskType + " into the database: \n\n" +
                         "   " + newTask + "\n\n" +
                         "You have " + listData.size() + " tasks on the list."
         );
