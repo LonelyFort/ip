@@ -10,25 +10,29 @@ public class Deadline extends Task {
     private LocalDateTime end;
 
     /**
-     * Constructs a Deadline object with a specified end time/date and task detail.
+     * A Constructor for a Deadline object with the specified
+     * end time, detail, and whether this task is tagged as
+     * important.
      *
-     * @param end The end time or date of the deadline.
-     * @param detail The details of the task.
+     * @param detail the detail or description of the task
+     * @param isImportant whether this task is tagged as important.
      */
-    public Deadline(LocalDateTime end, String detail) {
-        super(detail);
+    public Deadline(LocalDateTime end, String detail, boolean isImportant) {
+        super(detail, isImportant);
         this.end = end;
     }
 
     /**
-     * An overloaded constructor for a Deadline object with the specified end time, detail, and completion status.
+     * An overloaded constructor for a Deadline object with the specified
+     * end time, detail, completion status and whether this task is tagged as
+     * important.
      *
-     * @param end the end time of the deadline
-     * @param detail the detail or description of the deadline
-     * @param isCompleted the completion status of the deadline
+     * @param detail the detail or description of the task
+     * @param isCompleted the completion status of the task
+     * @param isImportant whether the task is tagged as important
      */
-    public Deadline(LocalDateTime end, String detail, boolean isCompleted) {
-        super(detail, isCompleted);
+    public Deadline(LocalDateTime end, String detail, boolean isCompleted, boolean isImportant) {
+        super(detail, isCompleted, isImportant);
         this.end = end;
     }
 
@@ -50,6 +54,7 @@ public class Deadline extends Task {
      */
     @Override
     public String toString() {
-        return String.format("[D]%s (by: %s)", super.toString(), DateTimeValueHandler.printDateTime(end));
+        return String.format("[D%s]%s (by: %s)", super.importantMark(),
+                super.toString(), DateTimeValueHandler.printDateTime(end));
     }
 }

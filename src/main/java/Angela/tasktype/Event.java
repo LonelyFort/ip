@@ -13,28 +13,29 @@ public class Event extends Task {
     private LocalDateTime end;
 
     /**
-     * Constructs an Event object with a specified start time/date, end time/date, and task detail.
+     * A Constructor for a Deadline object with the specified start time/date,
+     * end time/date, detail, and whether this task is tagged as important.
      *
-     * @param start The start time or date of the event.
-     * @param end The end time or date of the event.
-     * @param detail The details of the task.
+     * @param detail the detail or description of the task
+     * @param isImportant whether this task is tagged as important.
      */
-    public Event(LocalDateTime start, LocalDateTime end, String detail) {
-        super(detail);
+    public Event(LocalDateTime start, LocalDateTime end, String detail, boolean isImportant) {
+        super(detail, isImportant);
         this.start = start;
         this.end = end;
     }
 
     /**
-     * An overloaded constructor for a Event object with the specified end time, detail, and completion status.
+     * An overloaded constructor for a Event object with the specified
+     * end time, detail, completion status and whether this task is tagged as
+     * important.
      *
-     * @param start the start time of the event
-     * @param end the end time of the event
-     * @param detail the detail or description of the event
-     * @param isCompleted the completion status of the event
+     * @param detail the detail or description of the task
+     * @param isCompleted the completion status of the task
+     * @param isImportant whether the task is tagged as important
      */
-    public Event(LocalDateTime start, LocalDateTime end, String detail, boolean isCompleted) {
-        super(detail, isCompleted);
+    public Event(LocalDateTime start, LocalDateTime end, String detail, boolean isCompleted, boolean isImportant) {
+        super(detail, isCompleted, isImportant);
         this.start = start;
         this.end = end;
     }
@@ -59,7 +60,8 @@ public class Event extends Task {
      */
     @Override
     public String toString() {
-        return String.format("[E]%s (from: %s to: %s)",
+        return String.format("[E%s]%s (from: %s to: %s)",
+                super.importantMark(),
                 super.toString(),
                 DateTimeValueHandler.printDateTime(start),
                 DateTimeValueHandler.printDateTime(end));
