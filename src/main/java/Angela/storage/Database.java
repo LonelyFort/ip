@@ -80,19 +80,24 @@ public class Database {
      * @throws UnreadableFileException if the line format is not recognized
      */
     public void savedTaskParser(String line, TaskList taskList, int lineNum) throws UnreadableFileException {
-        String[] split = line.split("\\|");
+        String[] split = line.split("\\|"); //split line by the "|" symbol
         boolean isCompleted = split[1].equals("X");
         String taskName = split[2];
+        String taskType = split[0];
+        boolean isImportant = taskType.contains("*");
+        boolean isTodoType = taskType.equals("T") || taskType.equals("T*");
+        boolean isDeadlineType = taskType.equals("D") || taskType.equals("D*");
+        boolean isEventType = taskType.equals("E") || taskType.equals("E*");
 
-        if (split[0].equals("T")) {
-            taskList.add(new ToDo(taskName, isCompleted));
-        } else if (split[0].equals("D")) {
+        if (isTodoType) {
+            taskList.add(new ToDo(taskName, isCompleted, isImportant));
+        } else if (isDeadlineType) {
             LocalDateTime end = DateTimeValueHandler.parseDateTime(split[3]);
-            taskList.add(new Deadline(end, taskName, isCompleted));
-        } else if (split[0].equals("E")) {
+            taskList.add(new Deadline(end, taskName, isCompleted, isImportant));
+        } else if (isEventType) {
             LocalDateTime start = DateTimeValueHandler.parseDateTime(split[3]);
             LocalDateTime end = DateTimeValueHandler.parseDateTime(split[4]);
-            taskList.add(new Event(start, end, taskName, isCompleted));
+            taskList.add(new Event(start, end, taskName, isCompleted, isImportant));
         } else {
             throw new UnreadableFileException(lineNum);
         }

@@ -101,13 +101,14 @@ public class TaskList {
      * @param keyword the keyword to filter tasks by
      * @return a string representation of the filtered tasks, or a message if no tasks match the keyword
      */
-    public String filterByKeyword(String keyword) {
+    public String printFilteredByKeywordList(String keyword) {
         TaskList filteredTaskList = new TaskList();
 
         for (Task task : listData) {
-            if (task.containsKeyword(keyword)) {
-                filteredTaskList.add(task);
+            if (!task.containsKeyword(keyword)) {
+                continue;
             }
+            filteredTaskList.add(task);
         }
         
         if (filteredTaskList.size() == 0) {
@@ -115,5 +116,58 @@ public class TaskList {
         }
 
         return filteredTaskList.printList();
+    }
+
+    /**
+     * Returns a new TaskList containing only the tasks marked as important.
+     *
+     * @return a TaskList with tasks that are marked as important.
+     */
+    public TaskList filteredByImportance() {
+        TaskList filteredTaskList = new TaskList();
+
+        for (Task task : listData) {
+            if (!task.isImportant()) {
+                continue;
+            }
+            filteredTaskList.add(task);
+        }
+        return filteredTaskList;
+    }
+
+    /**
+     * Returns a string representation of the list of tasks filtered by importance.
+     * If no tasks are marked as important, a specific message is returned.
+     *
+     * @return a string representing the tasks marked as important, or a message indicating no important tasks.
+     */
+    public String printFilterByImportanceList() {
+        TaskList filteredTaskList = filteredByImportance();
+
+        if (filteredTaskList.size() == 0) {
+            return "No entries in the list are marked as important.";
+        }
+
+        return filteredTaskList.printList();
+    }
+
+    /**
+     * Prints a filtered list of important tasks based on the specified keyword.
+     * This method first filters the task list to include only important tasks.
+     * If there are no important tasks, it returns a message stating so.
+     * Otherwise, it returns a list of important tasks filtered by the given keyword.
+     *
+     * @param keyword The keyword to filter important tasks by.
+     * @return A string representing the filtered list of important tasks,
+     * or a message indicating no important tasks are present.
+     */
+    public String printFilteredImptList(String keyword) {
+        TaskList filteredTaskList = filteredByImportance();
+
+        if (filteredTaskList.size() == 0) {
+            return "No entries in the list are marked as important.";
+        }
+
+        return filteredTaskList.printFilteredByKeywordList(keyword);
     }
 }

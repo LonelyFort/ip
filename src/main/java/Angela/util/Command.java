@@ -37,18 +37,43 @@ import java.util.Arrays;
 public class Command {
     // Commands
     private static final String[] TASK_CREATION_COMMANDS = {
+            // TODO
             "todo",
+            "t",
+            "todoi",
+            "ti",
+
+            // Deadline
             "deadline",
-            "event"
+            "d",
+            "deadlinei",
+            "di",
+
+            // Event
+            "event",
+            "e",
+            "eventi",
+            "ei"
     };
     private static final String[] MODIFY_TASK_COMMANDS = {
             "check",
             "uncheck",
-            "delete"
+            "delete",
+            "marki",
+            "unmarki",
+            "c", //check
+            "uc", //uncheck
+            "del", //delete
+            "mi", //mark impt
+            "ui" //unmark impt
     };
     private static final String[] PRINT_COMMANDS = {
             "list",
-            "find"
+            "find",
+            "findi",
+            "l", //list
+            "f", //find
+            "fi" //findi
     };
 
     // Inputs that returns special response from Angela.
@@ -88,7 +113,8 @@ public class Command {
      * Handles the printing of list data.
      * If the list is empty, an EmptyListException is thrown.
      * Otherwise, it either prints the current data from the database,
-     * or it prints out the current data filtered by a specific keyword.
+     * prints out the current data filtered by a specific keyword,
+     * or it prints out list filtered by importance.
      *
      * @throws EmptyListException if the list data is empty
      */
@@ -97,8 +123,14 @@ public class Command {
             throw new EmptyListException();
         }
 
-        if (input.equals("list")) {
+        //case statements
+        boolean isPrintListInput = input.equals("list") || input.equals("l");
+        boolean isFindImptInput = input.equals("findi") || input.equals("fi");
+
+        if (isPrintListInput) {
             GUI.displayResponse("Loading current data from database...\n" + listData.printList());
+        } else if (isFindImptInput) {
+            GUI.displayResponse("Load current data from database...\n" + listData.printFilterByImportanceList());
         } else {
             if (!input.contains(" ")) {
                 throw new InvalidPrintSyntaxException();
@@ -112,15 +144,21 @@ public class Command {
                 throw new InvalidPrintSyntaxException();
             }
 
-            if (command.equals("find")) {
+            //case statements
+            boolean isFindCmd = command.equals("find") || command.equals("f");
+            boolean isFindImptCmd = command.equals("findi") || command.equals("fi");
+
+            if (isFindCmd) {
                 GUI.displayResponse("Loading current data from database that matched the keyword...\n" +
-                    listData.filterByKeyword(keywords));
+                    listData.printFilteredByKeywordList(keywords));
+            } else if (isFindImptCmd) {
+                GUI.displayResponse("Loading current data from database that matched the keyword...\n" +
+                    listData.printFilteredImptList(keywords));
             } else {
                 throw new InvalidPrintSyntaxException();
             }
         }
     }
-
 
     /**
      * Modifies a task in listData based on the provided input.
@@ -160,23 +198,31 @@ public class Command {
         }
 
         Task taskItem = listData.get(index);
-        if (command.equals("check")) {
+
+        // case statements
+        boolean isCheckCmd = command.equals("check") || command.equals("c");
+        boolean isUncheckedCmd = command.equals("uncheck") || command.equals("uc");
+        boolean isDeleteCmd = command.equals("delete") || command.equals("del");
+        boolean isMarkImptCmd = command.equals("marki") || command.equals("mi");
+        boolean isUnmarkImptCmd = command.equals("unmarki") || command.equals("ui");
+
+        if (isCheckCmd) {
             if (taskItem.isCompleted()) {
                 GUI.displayResponse("Task has already been marked as completed Manager.");
-            } else {
-                taskItem.check();
-                GUI.displayResponse("Request received. Marking the following task as completed:\n" + taskItem);
-                database.updateSavedTask(listData);
+                return;
             }
-        } else if (command.equals("uncheck")) {
+            taskItem.check();
+            GUI.displayResponse("Request received. Marking the following task as completed:\n" + taskItem);
+            database.updateSavedTask(listData);
+        } else if (isUncheckedCmd) {
             if (!taskItem.isCompleted()) {
                 GUI.displayResponse("Task has already been marked as incomplete Manager.");
-            } else {
-                taskItem.uncheck();
-                GUI.displayResponse("Request received. Marking the following task as incomplete:\n" + taskItem);
-                database.updateSavedTask(listData);
+                return;
             }
-        } else if (command.equals("delete")) {
+            taskItem.uncheck();
+            GUI.displayResponse("Request received. Marking the following task as incomplete:\n" + taskItem);
+            database.updateSavedTask(listData);
+        } else if (isDeleteCmd) {
             listData.remove(index);
             GUI.displayResponse(
                     "Request received. Removing the following task from the database: \n\n" +
@@ -184,6 +230,22 @@ public class Command {
                             "You have " + listData.size() + " tasks on the list."
             );
             
+            database.updateSavedTask(listData);
+        } else if (isMarkImptCmd) {
+            if (taskItem.isImportant()) {
+                GUI.displayResponse("Task has already been marked as important Manager.");
+                return;
+            }
+            taskItem.markImportant();
+            GUI.displayResponse("Request received. Marking the following task as important:\n" + taskItem);
+            database.updateSavedTask(listData);
+        } else if (isUnmarkImptCmd) {
+            if (!taskItem.isImportant()) {
+                GUI.displayResponse("Task is not marked as important Manager.");
+                return;
+            }
+            taskItem.unmarkImportant();
+            GUI.displayResponse("Request received. Removing the priority on the following task:\n" + taskItem);
             database.updateSavedTask(listData);
         } else {
             throw new TaskModificationException();
@@ -193,9 +255,13 @@ public class Command {
     /**
      * Handles the creation of a new task based on the provided input.
      * The input must follow a specific syntax:
-     * - "todo <taskDetails>" for ToDo tasks
-     * - "deadline <taskDetails> by:<endDateTime>" for Deadline tasks
-     * - "event <taskDetails> from:<startDateTime> to:<endDateTime>" for Event tasks
+     * - "todo <taskDetails> or t <taskDetails>" for ToDo tasks
+     * - "deadline <taskDetails> by:<endDateTime>
+     *     or d <taskDetails> by:<endDateTime>" for Deadline tasks
+     * - "event <taskDetails> from:<startDateTime> to:<endDateTime>
+     *     or e <taskDetails> from:<startDateTime> to:<endDateTime>" for Event tasks
+     * One can indicate "i" after command to mark task as important.
+     * (e.g todoi/ti to mark todo as important)
      * If the input syntax is incorrect, an InvalidSyntaxException is thrown.
      * If the input details are empty, an EmptyDetailException is thrown.
      *
@@ -211,15 +277,24 @@ public class Command {
         String cmd = input.substring(0, input.indexOf(" ")).toLowerCase();
         assert containsCommand(TASK_CREATION_COMMANDS, cmd) : "Incorrectly passed non-task creation " +
                 "commands to handle task creation function.";
+        boolean isImportant = cmd.endsWith("i");
         String details = input.substring(input.indexOf(" ") + 1).strip();
         if (details.isEmpty()) {
             throw new EmptyDetailException();
         }
         Task newTask;
 
-        if (cmd.equals("todo")) {
-            newTask = new ToDo(details);
-        } else if (cmd.equals("deadline")) {
+        // case statements
+        boolean isTodoTask = cmd.equals("todo") || cmd.equals("todoi")
+                || cmd.equals("t") || cmd.equals("ti");
+        boolean isDeadlineTask = cmd.equals("deadline") || cmd.equals("deadlinei")
+                || cmd.equals("d") || cmd.equals("di");
+        boolean isEventTask = cmd.equals("event") || cmd.equals("eventi")
+                || cmd.equals("e") || cmd.equals("ei");
+
+        if (isTodoTask) {
+            newTask = new ToDo(details, isImportant);
+        } else if (isDeadlineTask) {
             if (!details.contains("by:")) {
                 throw new InvalidSyntaxException(cmd);
             }
@@ -234,8 +309,8 @@ public class Command {
                 throw new InvalidDateException();
             }
 
-            newTask = new Deadline(endDateTime, taskDesc);
-        } else if (cmd.equals("event")) {
+            newTask = new Deadline(endDateTime, taskDesc, isImportant);
+        } else if (isEventTask) {
             if (!details.contains("from:") || !details.contains("to:")) {
                 throw new InvalidSyntaxException(cmd);
             }
@@ -257,7 +332,7 @@ public class Command {
                 throw new DateOrderException();
             }
 
-            newTask = new Event(startDateTime, endDateTime, taskDesc);
+            newTask = new Event(startDateTime, endDateTime, taskDesc, isImportant);
         } else {
             throw new TaskCreationException();
         }
