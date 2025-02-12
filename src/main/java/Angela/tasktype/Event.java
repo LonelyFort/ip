@@ -16,6 +16,8 @@ public class Event extends Task {
      * A Constructor for a Deadline object with the specified start time/date,
      * end time/date, detail, and whether this task is tagged as important.
      *
+     * @param start The start time or date of the event.
+     * @param end The end time or date of the event.
      * @param detail the detail or description of the task
      * @param isImportant whether this task is tagged as important.
      */
@@ -30,6 +32,8 @@ public class Event extends Task {
      * end time, detail, completion status and whether this task is tagged as
      * important.
      *
+     * @param start The start time or date of the event.
+     * @param end The end time or date of the event.
      * @param detail the detail or description of the task
      * @param isCompleted the completion status of the task
      * @param isImportant whether the task is tagged as important

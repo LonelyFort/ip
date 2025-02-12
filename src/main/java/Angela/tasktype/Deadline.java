@@ -14,6 +14,7 @@ public class Deadline extends Task {
      * end time, detail, and whether this task is tagged as
      * important.
      *
+     * @param end the end time of the deadline
      * @param detail the detail or description of the task
      * @param isImportant whether this task is tagged as important.
      */
@@ -27,6 +28,7 @@ public class Deadline extends Task {
      * end time, detail, completion status and whether this task is tagged as
      * important.
      *
+     * @param end the end time of the deadline
      * @param detail the detail or description of the task
      * @param isCompleted the completion status of the task
      * @param isImportant whether the task is tagged as important

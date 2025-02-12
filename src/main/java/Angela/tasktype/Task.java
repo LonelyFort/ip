@@ -129,7 +129,7 @@ public class Task {
     /**
      * Returns a string representation of the task,
      * which includes the task detail, its completion status and whether
-     * task is tagged as import.
+     * task is tagged as important.
      *
      * @return A string representation of the task.
      */
