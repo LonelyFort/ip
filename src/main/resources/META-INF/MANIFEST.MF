@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: Angela.app.Launcher
+Main-Class: angela.app.Launcher
 
