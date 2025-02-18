@@ -88,9 +88,7 @@ To flag deadline as important by default:
 
 Example:
 
-`deadline complete assignment by:2025-03-07 23:59` /
-
-`deadlinei prepare pitch by:2025-02-28 16:00`
+`deadline complete assignment by:2025-03-07 23:59` / `deadlinei prepare pitch by:2025-02-28 16:00`
 
 \*DATETIME format can be found under [DATETIME Format.](https://LonelyFort.github.io/ip/#datetime-format)
 
@@ -106,21 +104,15 @@ To flag task as important, add "i" after the command.
 
 Event syntax:
 
-`event TASK_NAME from:DATETIME to:DATETIME` /
-
-`e TASK_NAME from:DATETIME to:DATETIME`
+`event TASK_NAME from:DATETIME to:DATETIME` / `e TASK_NAME from:DATETIME to:DATETIME`
 
 To flag event as important by default:
 
-`eventi TASK_NAME from:DATETIME to:DATETIME` /
-
-`ei TASK_NAME from:DATETIME to:DATETIME`
+`eventi TASK_NAME from:DATETIME to:DATETIME` / `ei TASK_NAME from:DATETIME to:DATETIME`
 
 Example:
 
-`event taylor swift concert from:2026-08-26 00:00 to:2026-08-30 00:00` /
-
-`eventi meteorite shower from:2025-10-22 20:00 to:2025-10-22 22:00`
+`event taylor swift concert from:2026-08-26 00:00 to:2026-08-30 00:00` / `eventi meteorite shower from:2025-10-22 20:00 to:2025-10-22 22:00`
 
 \*DATETIME format can be found under [DATETIME Format.](https://LonelyFort.github.io/ip/#datetime-format)
 
