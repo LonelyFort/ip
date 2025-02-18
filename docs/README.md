@@ -1,5 +1,7 @@
 # User Guide for Angela (Just a Machine)
 
+![Product Screenshot](https://github.com/LonelyFort/ip/blob/master/docs/Ui.png)
+
 ## Introduction
 
 A straightforward and convenient task tracker which you can count on to keep track of the never-ending responsibilities in your life.
