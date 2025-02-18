@@ -1,6 +1,6 @@
 # User Guide for Angela (Just a Machine)
 
-![product screenshot](https://github.com/LonelyFort/ip/blob/master/docs/Ui.png)
+![product screenshot](https://LonelyFort.github.io/ip/Ui.png)
 
 ## Introduction
 
