@@ -1,4 +1,4 @@
-# User Guide for Angela (Just a Machine)
+# User Manual for Angela (Just a Machine)
 
 ![product screenshot](https://LonelyFort.github.io/ip/Ui.png)
 
