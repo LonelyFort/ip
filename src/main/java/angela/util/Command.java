@@ -416,7 +416,7 @@ public class Command {
                 handleEasterEgg(strippedInput);
             } else if (cmd.equals("manual")) {
                 GUI.displayResponse("You may find the full manual at: " +
-                        "https://lonelyfort.github.io/ip/ Manager.");
+                        "https://lonelyfort.github.io/ip/ .");
             } else if (cmd.equals("exit")) {
                 GUI.displayResponse("Initiating shutdown protocol...");
                 TimeOut.setTimeout(() -> System.exit(0), 1000);
