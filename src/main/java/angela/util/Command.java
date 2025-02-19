@@ -123,11 +123,11 @@ public class Command {
             throw new EmptyListException();
         }
 
-        String noWhiteSpaceInput = input.strip().toLowerCase();
+        String lowerCaseInput = input.toLowerCase();
 
         //case statements
-        boolean isPrintListInput = noWhiteSpaceInput.equals("list") || noWhiteSpaceInput.equals("l");
-        boolean isFindImptInput = noWhiteSpaceInput.equals("findi") || noWhiteSpaceInput.equals("fi");
+        boolean isPrintListInput = lowerCaseInput.equals("list") || lowerCaseInput.equals("l");
+        boolean isFindImptInput = lowerCaseInput.equals("findi") || lowerCaseInput.equals("fi");
 
         if (isPrintListInput) {
             GUI.displayResponse("Loading current data from database...\n" + listData.printList());
@@ -157,7 +157,7 @@ public class Command {
                 GUI.displayResponse("Loading current data from database that matched the keyword...\n" +
                     listData.printFilteredImptList(keywords));
             } else {
-                throw new InvalidPrintSyntaxException();
+                throw new PrintListException();
             }
         }
     }
@@ -187,7 +187,7 @@ public class Command {
         assert containsCommand(MODIFY_TASK_COMMANDS, command) : "Incorrectly passed non-modification " +
                 "commands to handle task modification function.";
 
-        String details = input.substring(input.indexOf(" ") + 1);
+        String details = input.substring(input.indexOf(" ") + 1).strip();
         // Regex will check if details contains only numbers
         if (!details.matches("^\\d+$")) {
             throw new WrongSyntaxException();
@@ -402,18 +402,22 @@ public class Command {
      * @param input the input string containing the chat command
      */
     public static void chatResponse(String input, TaskList listData, Database database) {
-        String cmd = input.split(" ")[0].toLowerCase();
+        String strippedInput = input.strip();
+        String cmd = strippedInput.split(" ")[0].toLowerCase();
 
         try {
             if (containsCommand(PRINT_COMMANDS, cmd)) {
-                handlePrint(input, listData);
+                handlePrint(strippedInput, listData);
             } else if (containsCommand(MODIFY_TASK_COMMANDS, cmd)) {
-                handleTaskModification(input, listData, database);
+                handleTaskModification(strippedInput, listData, database);
             } else if (containsCommand(TASK_CREATION_COMMANDS, cmd)) {
-                handleTaskCreation(input, listData, database);
+                handleTaskCreation(strippedInput, listData, database);
             } else if (containsCommand(EASTER_EGG_COMMANDS, cmd)) {
-                handleEasterEgg(input);
-            } else if (cmd.contains("exit")) {
+                handleEasterEgg(strippedInput);
+            } else if (cmd.equals("manual")) {
+                GUI.displayResponse("You may find the full manual at: " +
+                        "https://lonelyfort.github.io/ip/ Manager.");
+            } else if (cmd.equals("exit")) {
                 GUI.displayResponse("Initiating shutdown protocol...");
                 TimeOut.setTimeout(() -> System.exit(0), 1000);
             } else {

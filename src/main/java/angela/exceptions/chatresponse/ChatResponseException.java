@@ -15,6 +15,7 @@ public class ChatResponseException extends Exception {
      */
     @Override
     public String toString() {
-        return "Invalid command. Check the manual again Manager.";
+        return "Invalid command. Check the manual for " +
+                "valid commands Manager.";
     }
 }

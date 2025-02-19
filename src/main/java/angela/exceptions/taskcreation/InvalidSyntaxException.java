@@ -27,6 +27,7 @@ public class InvalidSyntaxException extends TaskCreationException {
      */
     @Override
     public String toString() {
-        return String.format("Invalid syntax for %s command. Check the manual again Manager.", cmd);
+        return String.format("Invalid syntax for %s command. " +
+                "Check the manual again Manager.", cmd);
     }
 }

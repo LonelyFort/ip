@@ -17,9 +17,6 @@ import angela.tasktype.Event;
 import angela.tasktype.ToDo;
 import angela.util.DateTimeValueHandler;
 import angela.ui.GUI;
-
-import angela.exceptions.storage.UnreadableFileException;
-
 /**
  * Database class to save entries stored in taskList into a readable file. (e.g txt file)
  * Solution inspired by Clifong's StorageManager
@@ -65,8 +62,6 @@ public class Database {
         } catch (IOException e) {
             GUI.displayError("An error has occurred while reading from saved file. " +
                             "Database integrity may have been compromised.");
-        } catch (UnreadableFileException e) {
-            GUI.displayError(e);
         }
     }
 
@@ -77,10 +72,11 @@ public class Database {
      * @param line the line of text representing the task
      * @param taskList the list to which the parsed task will be added
      * @param lineNum the line number of the task in the input file (used for error reporting)
-     * @throws UnreadableFileException if the line format is not recognized
      */
-    public void savedTaskParser(String line, TaskList taskList, int lineNum) throws UnreadableFileException {
+    public void savedTaskParser(String line, TaskList taskList, int lineNum) {
         String[] split = line.split("\\|"); //split line by the "|" symbol
+        assert split.length >= 3 : "Database contains unreadable line at line " + lineNum + ".";
+
         boolean isCompleted = split[1].equals("X");
         String taskName = split[2];
         String taskType = split[0];
@@ -90,16 +86,22 @@ public class Database {
         boolean isEventType = taskType.equals("E") || taskType.equals("E*");
 
         if (isTodoType) {
+            assert split.length == 3 : "Database contains unreadable todo task " +
+                    "at line " + lineNum + ".";
             taskList.add(new ToDo(taskName, isCompleted, isImportant));
         } else if (isDeadlineType) {
+            assert split.length == 4 : "Database contains unreadable deadline task " +
+                    "at line " + lineNum + ".";
             LocalDateTime end = DateTimeValueHandler.parseDateTime(split[3]);
             taskList.add(new Deadline(end, taskName, isCompleted, isImportant));
         } else if (isEventType) {
+            assert split.length == 5 : "Database contains unreadable event task " +
+                    "at line " + lineNum + ".";
             LocalDateTime start = DateTimeValueHandler.parseDateTime(split[3]);
             LocalDateTime end = DateTimeValueHandler.parseDateTime(split[4]);
             taskList.add(new Event(start, end, taskName, isCompleted, isImportant));
         } else {
-            throw new UnreadableFileException(lineNum);
+            assert false : "Database contains unreadable line at line: " + lineNum + ".";
         }
     }
 
