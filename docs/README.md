@@ -288,6 +288,10 @@ Example: `findi final exam`
 
 Exits the program. Command is case insensitive and ignores trailing white spaces.
 
+### manual
+
+Provides the link to this page.
+
 ### easter egg commands
 
 For those who know the game Lobotomy Corp, there are some special responses Angela can give when certain commands are entered. These commands will not be shown in this user guide as it contains spoilers to the game. If you are still keen otherwise, you may check the source code of Angela.
