@@ -303,6 +303,9 @@ public class Command {
             }
 
             String taskDesc = details.substring(0, details.indexOf("by:"));
+            if (taskDesc.isEmpty()) {
+                throw new EmptyDetailException();
+            }
             String end = details.substring(details.indexOf("by:") + 3).strip();
             LocalDateTime endDateTime;
 
@@ -320,6 +323,9 @@ public class Command {
             }
 
             String taskDesc = details.substring(0, details.indexOf("from:"));
+            if (taskDesc.isEmpty()) {
+                throw new EmptyDetailException();
+            }
             String start = details.substring(details.indexOf("from:") + 5, details.indexOf("to:")).strip();
             String end = details.substring(details.indexOf("to:") + 3).strip();
             LocalDateTime startDateTime;
