@@ -1,4 +1,4 @@
-# User Guide for Angela (Just a Machine)
+# User Manual for Angela (Just a Machine)
 
 ![product screenshot](https://LonelyFort.github.io/ip/Ui.png)
 
@@ -287,6 +287,10 @@ Example: `findi final exam`
 ### exit
 
 Exits the program. Command is case insensitive and ignores trailing white spaces.
+
+### manual
+
+Provides the link to this page.
 
 ### easter egg commands
 
